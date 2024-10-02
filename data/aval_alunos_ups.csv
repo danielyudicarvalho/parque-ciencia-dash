@@ -1,0 +1,4 @@
+School_Name, Server_Responsible, Student_Count, Visit_DateTime, Rating, Feedback, Option_1, Option_2, Option_3, Option_4, Min_Age, Max_Age, City_District
+ups,Daniel ,22,2024-09-09 12:26,2,null,null,null,null,null,11,12,campo grande 
+ups,Daniel ,22,2024-09-09 12:26,1,null,null,null,null,null,11,12,campo grande 
+ups,Daniel ,22,2024-09-09 12:26,5,null,null,null,null,null,11,12,campo grande 

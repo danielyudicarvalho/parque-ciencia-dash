@@ -1,0 +1,19 @@
+School_Name,Server_Responsible,Student_Count,Visit_DateTime,Rating,Feedback,Option_1,Option_2,Option_3,Option_4,Min_Age,Max_Age,City_District
+escolaviva,Camila,40,2024-09-14 09:30,5,null,Monitores atenciosos,Bons equipamentos,null,null,10,15,curitiba
+escolaviva,Camila,40,2024-09-14 09:30,4,null,Ótima estrutura,Bom atendimento,null,null,10,15,curitiba
+colegioabc,Marcelo,28,2024-09-14 10:15,3,null,null,null,null,null,14,17,porto alegre
+colegioabc,Marcelo,28,2024-09-14 10:15,2,null,Falta de funcionários,null,null,null,14,17,porto alegre
+colegioabc,Marcelo,28,2024-09-14 10:15,4,null,Bom para todas as idades,null,null,null,14,17,porto alegre
+institutobrasil,Juliana,60,2024-09-15 11:00,5,null,Ótimas atrações,Monitores capacitados,null,null,12,18,brasilia
+institutobrasil,Juliana,60,2024-09-15 11:00,4,null,Bons espaços de aprendizagem,null,null,null,12,18,brasilia
+colegionovo,Paulo,45,2024-09-15 12:45,3,null,null,null,null,null,16,19,salvador
+colegionovo,Paulo,45,2024-09-15 12:45,5,null,Excelente estrutura,Bons monitores,null,null,16,19,salvador
+colegionovo,Paulo,45,2024-09-15 12:45,4,null,Bom ambiente educacional,null,null,null,16,19,salvador
+ufpr,Ana,50,2024-09-16 09:15,5,null,Atividades diversificadas,Monitores atenciosos,null,null,13,17,curitiba
+ufpr,Ana,50,2024-09-16 09:15,4,null,Bons equipamentos,Bom atendimento,null,null,13,17,curitiba
+ufpr,Ana,50,2024-09-16 09:15,3,null,null,null,null,null,13,17,curitiba
+ceunsp,Roberto,35,2024-09-16 10:30,2,null,Precisa de mais atrações,null,null,null,15,18,sorocaba
+ceunsp,Roberto,35,2024-09-16 10:30,3,null,null,null,null,null,15,18,sorocaba
+escolamoderna,Fernanda,32,2024-09-17 11:45,5,null,Ótima experiência educativa,Ambiente acolhedor,null,null,11,14,rio de janeiro
+escolamoderna,Fernanda,32,2024-09-17 11:45,4,null,Bom atendimento,null,null,null,11,14,rio de janeiro
+colegiosantos,Lucas,27,2024-09-17 13:00,3,null,null,null,null,null,14,17,s

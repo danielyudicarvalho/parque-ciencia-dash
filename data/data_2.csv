@@ -1,0 +1,19 @@
+School_Name,Server_Responsible,Student_Count,Visit_DateTime,Rating,Feedback,Option_1,Option_2,Option_3,Option_4,Min_Age,Max_Age,City_District
+uejs,Arthur,33,2024-09-10 10:30,3,null,null,null,null,null,56,90,são paulo
+uejs,Arthur,33,2024-09-10 10:30,5,null,Variedade de atividades,null,null,null,56,90,são paulo
+uejs,Arthur,33,2024-09-10 10:30,4,null,Bom atendimento,Bem organizado,null,null,56,90,são paulo
+ups,Daniel,22,2024-09-10 13:15,2,null,Atrativos interessantes,Precisa de mais funcionários,null,null,11,12,campo grande
+ups,Daniel,22,2024-09-10 13:15,5,null,Ótima estrutura,Bom para todas as idades,null,null,11,12,campo grande
+uejs,Arthur,33,2024-09-11 14:20,1,A estrutura do parque está mal conservada,Precisa de mais manutenção,null,null,null,56,90,são paulo
+uejs,Arthur,33,2024-09-11 14:20,4,null,Bom atendimento,Bons monitores,null,null,56,90,são paulo
+ups,Daniel,22,2024-09-11 14:45,5,null,Excelente atendimento,Atividades interativas,null,null,11,12,campo grande
+ups,Daniel,22,2024-09-11 14:45,3,null,Boa estrutura,null,null,null,11,12,campo grande
+ups,Daniel,22,2024-09-11 14:45,2,null,Precisa de mais funcionários,null,null,null,11,12,campo grande
+ufms,Lucas,45,2024-09-12 09:30,4,null,Variedade de atrações,null,null,null,13,16,campo grande
+ufms,Lucas,45,2024-09-12 09:30,3,null,null,null,null,null,13,16,campo grande
+ufms,Lucas,45,2024-09-12 09:30,5,null,Ótima experiência para crianças,Monitores atenciosos,null,null,13,16,campo grande
+uejs,Arthur,33,2024-09-12 11:00,1,null,Precisa de melhorias na estrutura,null,null,null,56,90,são paulo
+uejs,Arthur,33,2024-09-12 11:00,3,null,Boas atividades,Mas precisa de mais atrações,null,null,56,90,são paulo
+ufms,Lucas,45,2024-09-13 12:00,4,null,Monitores atenciosos,null,null,null,13,16,campo grande
+ufms,Lucas,45,2024-09-13 12:00,5,null,Ótima organização,null,null,null,13,16,campo grande
+ups,Daniel,22,2024-09-13 13:30,2,null,Atrações um pouco desatualizadas,null,null,null,11,12,campo grande
