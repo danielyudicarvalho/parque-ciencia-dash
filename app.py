@@ -147,7 +147,7 @@ def create_figures(df):
     if not df_option_counts.empty:
         figures['option_counts'] = px.bar(
             df_option_counts, x='Option_Text', y='count',
-            title='Occurrences of Selected Options', labels={'count': 'Count', 'Option_Text': 'Option'}
+            title='Ocorrências das opções selecionadas', labels={'count': 'Count', 'Option_Text': 'Option'}
         )
     else:
         figures['option_counts'] = None
@@ -158,7 +158,7 @@ def create_figures(df):
     if not df_city_district_counts.empty:
         figures['city_district_counts'] = px.bar(
             df_city_district_counts, x='City_District', y='count',
-            title='Occurrences of City Districts', labels={'count': 'Count', 'City_District': 'District'}
+            title='Ocorrências por Distritos', labels={'count': 'Count', 'City_District': 'District'}
         )
     else:
         figures['city_district_counts'] = None
@@ -168,7 +168,7 @@ def create_figures(df):
     if not df_student_count.empty:
         figures['student_count'] = px.bar(
             df_student_count, x='School_Name', y='Student_Count',
-            title='Total Students by School', labels={'Student_Count': 'Number of Students', 'School_Name': 'School'}
+            title='Total de alunos por escola', labels={'Student_Count': 'Number of Students', 'School_Name': 'School'}
         )
     else:
         figures['student_count'] = None
@@ -178,7 +178,7 @@ def create_figures(df):
     if not df_district_visits.empty:
         figures['district_visits'] = px.bar(
             df_district_visits, x='City_District', y='Student_Count',
-            title='Total Visits by District', labels={'Student_Count': 'Number of Visitors', 'City_District': 'District'}
+            title='Total de visitas por Distrito', labels={'Student_Count': 'Number of Visitors', 'City_District': 'District'}
         )
     else:
         figures['district_visits'] = None
@@ -188,7 +188,7 @@ def create_figures(df):
     if not df_avg_rating.empty:
         figures['avg_rating'] = px.bar(
             df_avg_rating, x='City_District', y='Rating',
-            title='Average Rating by District', labels={'Rating': 'Average Rating', 'City_District': 'District'}
+            title='Avaliação média por distrito', labels={'Rating': 'Average Rating', 'City_District': 'District'}
         )
     else:
         figures['avg_rating'] = None
@@ -198,7 +198,7 @@ def create_figures(df):
     if not df_age_distribution.empty:
         figures['age_distribution'] = px.bar(
             df_age_distribution, x='Age_Group', y='Student_Count',
-            title='Age Group Distribution of Visitors', labels={'Student_Count': 'Number of Visitors', 'Age_Group': 'Age Group'}
+            title='Distribuição de visitantes por faixa etária', labels={'Student_Count': 'Number of Visitors', 'Age_Group': 'Age Group'}
         )
     else:
         figures['age_distribution'] = None
@@ -209,7 +209,7 @@ def create_figures(df):
         if not df_visits_by_day.empty:
             figures['visits_by_day'] = px.line(
                 df_visits_by_day, x='Date', y='Student_Count',
-                title='Total Visits by Date', labels={'Student_Count': 'Number of Visitors', 'Date': 'Date'}
+                title='Visitas por data', labels={'Student_Count': 'Number of Visitors', 'Date': 'Date'}
             )
         else:
             figures['visits_by_day'] = None
@@ -222,7 +222,7 @@ def create_figures(df):
         if not df_visits_by_hour.empty:
             figures['visits_by_hour'] = px.line(
                 df_visits_by_hour, x='Hour', y='Student_Count',
-                title='Total Visits by Hour', labels={'Student_Count': 'Number of Visitors', 'Hour': 'Hour of Day'}
+                title='Visitas por hora', labels={'Student_Count': 'Number of Visitors', 'Hour': 'Hour of Day'}
             )
         else:
             figures['visits_by_hour'] = None
@@ -235,7 +235,7 @@ def create_figures(df):
     if not nps_counts.empty:
         figures['nps_breakdown'] = px.pie(
             nps_counts, names='Group', values='count',
-            title='Distribution of Promoters, Passives, and Detractors'
+            title='Análise de Promotores, Passivos e Detratores'
         )
     else:
         figures['nps_breakdown'] = None
@@ -259,7 +259,7 @@ def create_figures(df):
                     aspect='auto',
                     color_continuous_scale='Viridis',
                     labels={'color': 'Average Rating'},
-                    title='Correlation between Options and Rating'
+                    title=''
                 )
             else:
                 figures['heatmap'] = None
@@ -269,6 +269,15 @@ def create_figures(df):
         figures['heatmap'] = None
 
     return figures
+
+custom_styles = {
+    'primary': '#0288d1',  # Main blue color for headers and text
+    'background': '#ffffff',  # White background
+    'text': '#333333',  # Dark text color for contrast
+    'card_colors': ['#1565c0', '#1e88e5', '#42a5f5'],  # Different shades of blue for the cards
+    'font_blue': '#007cba'
+}
+
 
 def build_dashboard(df):
     """
@@ -291,12 +300,12 @@ def build_dashboard(df):
 
     # Main layout with filters
     app.layout = dbc.Container([
-        html.H1(children='Parque da Ciência - Dashboard', className="text-center my-4"),
+        html.H1(children='Parque da Ciência - Dashboard', className="text-center my-4", style={'color': custom_styles['font_blue']}),
 
         # Filters
         dbc.Row([
             dbc.Col([
-                html.Label("School:"),
+                html.Label("School:", style={'color': custom_styles['font_blue']}),
                 dcc.Dropdown(
                     id='school-filter',
                     options=[{'label': school.title(), 'value': school} for school in school_names],
@@ -306,7 +315,7 @@ def build_dashboard(df):
                 ),
             ], md=3),
             dbc.Col([
-                html.Label("District:"),
+                html.Label("District:", style={'color': custom_styles['font_blue']}),
                 dcc.Dropdown(
                     id='district-filter',
                     options=[{'label': district.title(), 'value': district} for district in city_districts],
@@ -316,7 +325,7 @@ def build_dashboard(df):
                 ),
             ], md=3),
             dbc.Col([
-                html.Label("Rating:"),
+                html.Label("Rating:", style={'color': custom_styles['font_blue']}),
                 dcc.Dropdown(
                     id='rating-filter',
                     options=[{'label': str(rating), 'value': rating} for rating in ratings],
@@ -326,7 +335,7 @@ def build_dashboard(df):
                 ),
             ], md=2),
             dbc.Col([
-                html.Label("Date Range:"),
+                html.Label("Date Range:", style={'color': custom_styles['font_blue']}),
                 dcc.DatePickerRange(
                     id='date-filter',
                     min_date_allowed=min_date,
@@ -350,7 +359,7 @@ def build_dashboard(df):
 
         html.Hr(),
 
-        html.H3("Visitor Feedbacks"),
+        html.H3("Visitor Feedbacks", style={'color': custom_styles['font_blue']}),
         dash_table.DataTable(
             id='table-feedbacks',
             page_size=10,
@@ -458,33 +467,34 @@ def build_dashboard(df):
         else:
             # Recalculate metrics and figures with filtered data
             nps_score, df_nps = calculate_nps(df_filtered)
-            total_visitors = df_filtered['Student_Count'].sum()
-            avg_rating = df_filtered['Rating'].mean()
+            total_visitors = round(df_filtered['Student_Count'].sum(), 2)
+            avg_rating = round(df_filtered['Rating'].mean(), 2)
 
             # Metrics cards
             cards = dbc.Row([
-                dbc.Col(dbc.Card(
-                    dbc.CardBody([
-                        html.H4("Pontuação geral do NPS", className="card-title"),
-                        html.H2(f"{nps_score:.2f}", className="card-text"),
-                    ]),
-                    color="primary", inverse=True
-                ), width=4),
-                dbc.Col(dbc.Card(
-                    dbc.CardBody([
-                        html.H4("Total de visitantes", className="card-title"),
-                        html.H2(f"{total_visitors}", className="card-text"),
-                    ]),
-                    color="info", inverse=True
-                ), width=4),
-                dbc.Col(dbc.Card(
-                    dbc.CardBody([
-                        html.H4("Avaliação média", className="card-title"),
-                        html.H2(f"{avg_rating:.2f}", className="card-text"),
-                    ]),
-                    color="success", inverse=True
-                ), width=4),
-            ], className="mb-4")
+            dbc.Col(dbc.Card(
+                dbc.CardBody([
+                    html.H4("Pontuação geral do NPS", className="card-title", style={'color': 'white'}),
+                    html.H2(nps_score, className="card-text", style={'color': 'white'}),
+                ]),
+                color=custom_styles['card_colors'][0], inverse=True
+            ), width=4),
+            dbc.Col(dbc.Card(
+                dbc.CardBody([
+                    html.H4("Total de visitantes", className="card-title", style={'color': 'white'}),
+                    html.H2(total_visitors, className="card-text", style={'color': 'white'}),
+                ]),
+                color=custom_styles['card_colors'][1], inverse=True
+            ), width=4),
+            dbc.Col(dbc.Card(
+                dbc.CardBody([
+                    html.H4("Avaliação média", className="card-title", style={'color': 'white'}),
+                    html.H2(avg_rating, className="card-text", style={'color': 'white'}),
+                ]),
+                color=custom_styles['card_colors'][2], inverse=True
+            ), width=4),
+        ], className="mb-4"),
+
 
             # Recreate figures with filtered data
             figures = create_figures(df_filtered)
@@ -493,11 +503,11 @@ def build_dashboard(df):
             graphs = html.Div([
                 dbc.Row([
                     dbc.Col([
-                        html.H3("Ocorrências das opções selecionadas"),
+                        html.H3("Ocorrências das opções selecionadas", style={'color': custom_styles['font_blue']}),
                         dcc.Graph(figure=figures['option_counts']) if figures['option_counts'] else html.Div("No data to display the options chart.")
                     ], width=6),
                     dbc.Col([
-                        html.H3("Ocorrências por  Distritos"),
+                        html.H3("Ocorrências por  Distritos",style={'color': custom_styles['font_blue']}),
                         dcc.Graph(figure=figures['city_district_counts']) if figures['city_district_counts'] else html.Div("No data to display the districts chart.")
                     ], width=6),
                 ]),
@@ -506,11 +516,11 @@ def build_dashboard(df):
 
                 dbc.Row([
                     dbc.Col([
-                        html.H3("Total de alunos por escola"),
+                        html.H3("Total de alunos por escola", style={'color': custom_styles['font_blue']}),
                         dcc.Graph(figure=figures['student_count']) if figures['student_count'] else html.Div("No data to display the students chart.")
                     ], width=6),
                     dbc.Col([
-                        html.H3("Total de visitas por distrito"),
+                        html.H3("Total de visitas por distrito", style={'color': custom_styles['font_blue']}),
                         dcc.Graph(figure=figures['district_visits']) if figures['district_visits'] else html.Div("No data to display the visits chart.")
                     ], width=6),
                 ]),
@@ -519,11 +529,11 @@ def build_dashboard(df):
 
                 dbc.Row([
                     dbc.Col([
-                        html.H3("Avaliação média por distrito"),
+                        html.H3("Avaliação média por distrito", style={'color': custom_styles['font_blue']}),
                         dcc.Graph(figure=figures['avg_rating']) if figures['avg_rating'] else html.Div("No data to display the average rating chart.")
                     ], width=6),
                     dbc.Col([
-                        html.H3("Distribuição de visitantes por faixa etária"),
+                        html.H3("Distribuição de visitantes por faixa etária", style={'color': custom_styles['font_blue']}),
                         dcc.Graph(figure=figures['age_distribution']) if figures['age_distribution'] else html.Div("No data to display the age group chart.")
                     ], width=6),
                 ]),
@@ -543,23 +553,23 @@ def build_dashboard(df):
 
                 dbc.Row([
                     dbc.Col([
-                        html.H3("Visitas por data"),
+                        html.H3("Visitas por data", style={'color': custom_styles['font_blue']}),
                         dcc.Graph(figure=figures['visits_by_day']) if figures['visits_by_day'] else html.Div('Date data unavailable.')
                     ], width=6),
                     dbc.Col([
-                        html.H3("Visitas por hora"),
+                        html.H3("Visitas por hora", style={'color': custom_styles['font_blue']}),
                         dcc.Graph(figure=figures['visits_by_hour']) if figures['visits_by_hour'] else html.Div('Hour data unavailable.')
                     ], width=6),
                 ]),
 
                 html.Hr(),
 
-                html.H3("Análise de Promotores, Passivos e Detratores"),
+                html.H3("Análise de Promotores, Passivos e Detratores", style={'color': custom_styles['font_blue']}),
                 dcc.Graph(figure=figures['nps_breakdown']) if figures['nps_breakdown'] else html.Div("No data to display the NPS breakdown chart."),
 
                 html.Hr(),
 
-                html.H3("Correlação entre Opções e Rating"),
+                html.H3("Correlação entre Opções e Rating", style={'color': custom_styles['font_blue']}),
                 dcc.Graph(figure=figures['heatmap']) if figures['heatmap'] else html.Div("No data to display the heatmap."),
             ])
 
