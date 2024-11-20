@@ -151,7 +151,7 @@ def create_figures(df):
     if not df_option_counts.empty:
         figures['option_counts'] = px.bar(
             df_option_counts, x='Option_Text', y='count',
-            title='Ocorrências das opções selecionadas', labels={'count': 'Count', 'Option_Text': 'Option'}
+            title='Ocorrências das opções selecionadas', labels={'count': 'Quantidade', 'Option_Text': 'Opção'}
         )
     else:
         figures['option_counts'] = None
@@ -162,7 +162,7 @@ def create_figures(df):
     if not df_city_district_counts.empty:
         figures['city_district_counts'] = px.bar(
             df_city_district_counts, x='City_District', y='count',
-            title='Ocorrências por Distritos', labels={'count': 'Count', 'City_District': 'District'}
+            title='Ocorrências por Cidades', labels={'count': 'Quantidade', 'City_District': 'Cidade'}
         )
     else:
         figures['city_district_counts'] = None
@@ -172,7 +172,7 @@ def create_figures(df):
     if not df_student_count.empty:
         figures['student_count'] = px.bar(
             df_student_count, x='School_Name', y='Student_Count',
-            title='Total de alunos por escola', labels={'Student_Count': 'Number of Students', 'School_Name': 'School'}
+            title='Total de alunos por escola', labels={'Student_Count': 'Número de estudantes', 'School_Name': 'Colégio'}
         )
     else:
         figures['student_count'] = None
@@ -182,7 +182,7 @@ def create_figures(df):
     if not df_district_visits.empty:
         figures['district_visits'] = px.bar(
             df_district_visits, x='City_District', y='Student_Count',
-            title='Total de visitas por Distrito', labels={'Student_Count': 'Number of Visitors', 'City_District': 'District'}
+            title='Total de visitas Cidade', labels={'Student_Count': 'Número de visitantes', 'City_District': 'Cidade'}
         )
     else:
         figures['district_visits'] = None
@@ -192,7 +192,7 @@ def create_figures(df):
     if not df_avg_rating.empty:
         figures['avg_rating'] = px.bar(
             df_avg_rating, x='City_District', y='Rating',
-            title='Avaliação média por distrito', labels={'Rating': 'Average Rating', 'City_District': 'District'}
+            title='Avaliação média por Cidade', labels={'Rating': 'Avaliação Médio', 'City_District': 'Cidade'}
         )
     else:
         figures['avg_rating'] = None
@@ -202,7 +202,7 @@ def create_figures(df):
     if not df_age_distribution.empty:
         figures['age_distribution'] = px.bar(
             df_age_distribution, x='Age_Group', y='Student_Count',
-            title='Distribuição de visitantes por faixa etária', labels={'Student_Count': 'Number of Visitors', 'Age_Group': 'Age Group'}
+            title='Distribuição de visitantes por faixa etária', labels={'Student_Count': 'Quantidades de visitantes', 'Age_Group': 'Grupo de idade'}
         )
     else:
         figures['age_distribution'] = None
@@ -213,7 +213,7 @@ def create_figures(df):
         if not df_visits_by_day.empty:
             figures['visits_by_day'] = px.line(
                 df_visits_by_day, x='Date', y='Student_Count',
-                title='Visitas por data', labels={'Student_Count': 'Number of Visitors', 'Date': 'Date'}
+                title='Visitas por data', labels={'Student_Count': 'Quantidade de visitantes', 'Date': 'Data'}
             )
         else:
             figures['visits_by_day'] = None
@@ -226,7 +226,7 @@ def create_figures(df):
         if not df_visits_by_hour.empty:
             figures['visits_by_hour'] = px.line(
                 df_visits_by_hour, x='Hour', y='Student_Count',
-                title='Visitas por hora', labels={'Student_Count': 'Number of Visitors', 'Hour': 'Hour of Day'}
+                title='Visitas por hora', labels={'Student_Count': 'Quantidade de visitantes', 'Hour': 'Horas por dia'}
             )
         else:
             figures['visits_by_hour'] = None
@@ -543,7 +543,7 @@ def build_dashboard(df):
                         #dcc.Graph(figure=figures['option_counts']) if figures['option_counts'] else html.Div("No data to display the options chart.")
                     ], width=6),
                     dbc.Col([
-                        html.H3("Ocorrências por  Distritos",style={'color': custom_styles['font_blue']}),
+                        html.H3("Ocorrências por  Cidades",style={'color': custom_styles['font_blue']}),
                         dcc.Graph(figure=figures['city_district_counts']) if figures['city_district_counts'] else html.Div("No data to display the districts chart.")
                     ], width=6),
                 ]),
