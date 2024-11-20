@@ -7,6 +7,10 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
 from dash.dependencies import Input, Output
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+import io
+import base64
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -278,6 +282,27 @@ custom_styles = {
     'font_blue': '#007cba'
 }
 
+def create_wordcloud(option_counts):
+    """
+    Create a word cloud from the option counts.
+
+    Parameters:
+    - option_counts (pd.DataFrame): DataFrame containing counts of options.
+
+    Returns:
+    - str: Base64 encoded image of the word cloud.
+    """
+    text = ' '.join(option_counts['Option_Text'].values * option_counts['count'].values)
+    wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text)
+    
+    # Save wordcloud to a BytesIO object
+    img = io.BytesIO()
+    wordcloud.to_image().save(img, format='PNG')
+    img.seek(0)
+    encoded_image = base64.b64encode(img.read()).decode('utf-8')
+    return f"data:image/png;base64,{encoded_image}"
+
+
 
 def build_dashboard(df):
     """
@@ -298,14 +323,21 @@ def build_dashboard(df):
     max_date = df['Visit_DateTime'].max().date() if not df['Visit_DateTime'].isnull().all() else None
     ratings = sorted(df['Rating'].dropna().unique())
 
+    
+
     # Main layout with filters
     app.layout = dbc.Container([
-        html.H1(children='Parque da Ciência - Dashboard', className="text-center my-4", style={'color': custom_styles['font_blue']}),
 
-        # Filters
+        html.Div([
+            html.Img(
+                src='assets/logo-parque.jpeg',  # Caminho da imagem
+                style={'height': '100px', 'margin-bottom': '20px'}  # Ajuste o estilo conforme necessário
+            )
+        ], className="text-center"),
+                # Filters
         dbc.Row([
             dbc.Col([
-                html.Label("School:", style={'color': custom_styles['font_blue']}),
+                html.Label("Colégio:", style={'color': custom_styles['font_blue']}),
                 dcc.Dropdown(
                     id='school-filter',
                     options=[{'label': school.title(), 'value': school} for school in school_names],
@@ -315,7 +347,7 @@ def build_dashboard(df):
                 ),
             ], md=3),
             dbc.Col([
-                html.Label("District:", style={'color': custom_styles['font_blue']}),
+                html.Label("Cidade:", style={'color': custom_styles['font_blue']}),
                 dcc.Dropdown(
                     id='district-filter',
                     options=[{'label': district.title(), 'value': district} for district in city_districts],
@@ -325,7 +357,7 @@ def build_dashboard(df):
                 ),
             ], md=3),
             dbc.Col([
-                html.Label("Rating:", style={'color': custom_styles['font_blue']}),
+                html.Label("Voto:", style={'color': custom_styles['font_blue']}),
                 dcc.Dropdown(
                     id='rating-filter',
                     options=[{'label': str(rating), 'value': rating} for rating in ratings],
@@ -335,7 +367,7 @@ def build_dashboard(df):
                 ),
             ], md=2),
             dbc.Col([
-                html.Label("Date Range:", style={'color': custom_styles['font_blue']}),
+                html.Label("Datas:", style={'color': custom_styles['font_blue']}),
                 dcc.DatePickerRange(
                     id='date-filter',
                     min_date_allowed=min_date,
@@ -347,6 +379,7 @@ def build_dashboard(df):
                     end_date_placeholder_text='End Date',
                 ),
             ], md=4),
+            html.H1(children='Parque da Ciência - Dashboard', className="text-center my-4", style={'color': custom_styles['font_blue']}),
         ], className="mb-4"),
 
         # Metrics cards (will be updated via callback)
@@ -467,6 +500,7 @@ def build_dashboard(df):
         else:
             # Recalculate metrics and figures with filtered data
             nps_score, df_nps = calculate_nps(df_filtered)
+            df_nps = round(nps_score, 2)
             total_visitors = round(df_filtered['Student_Count'].sum(), 2)
             avg_rating = round(df_filtered['Rating'].mean(), 2)
 
@@ -475,7 +509,7 @@ def build_dashboard(df):
             dbc.Col(dbc.Card(
                 dbc.CardBody([
                     html.H4("Pontuação geral do NPS", className="card-title", style={'color': 'white'}),
-                    html.H2(nps_score, className="card-text", style={'color': 'white'}),
+                    html.H2(df_nps, className="card-text", style={'color': 'white'}),
                 ]),
                 color=custom_styles['card_colors'][0], inverse=True
             ), width=4),
@@ -498,13 +532,15 @@ def build_dashboard(df):
 
             # Recreate figures with filtered data
             figures = create_figures(df_filtered)
+            wordcloud_image = create_wordcloud(get_option_counts(df_filtered))
 
             # Graphs content
             graphs = html.Div([
                 dbc.Row([
                     dbc.Col([
                         html.H3("Ocorrências das opções selecionadas", style={'color': custom_styles['font_blue']}),
-                        dcc.Graph(figure=figures['option_counts']) if figures['option_counts'] else html.Div("No data to display the options chart.")
+                        html.Img(src=wordcloud_image, style={'width': '100%'}) if wordcloud_image else html.Div("No data to display the options chart."),
+                        #dcc.Graph(figure=figures['option_counts']) if figures['option_counts'] else html.Div("No data to display the options chart.")
                     ], width=6),
                     dbc.Col([
                         html.H3("Ocorrências por  Distritos",style={'color': custom_styles['font_blue']}),
@@ -593,6 +629,7 @@ def main():
     app = build_dashboard(df_processed)
 
     # Run the app
+    #app.run_server(debug=True)
     app.run_server(debug=True, host='0.0.0.0', port=8080)
 
 
