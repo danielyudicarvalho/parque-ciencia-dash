@@ -249,7 +249,7 @@ def create_figures(df):
         id_vars=['Rating'],
         value_vars=['Option_1', 'Option_2', 'Option_3', 'Option_4'],
         var_name='Option',
-        value_name='Option_Text'
+        value_name='Texto'
     )
     df_options_melted = df_options_melted.dropna(subset=['Option_Text'])
 
@@ -262,7 +262,7 @@ def create_figures(df):
                     corr_matrix,
                     aspect='auto',
                     color_continuous_scale='Viridis',
-                    labels={'color': 'Average Rating'},
+                    labels={'color': 'Avaliação Média'},
                     title=''
                 )
             else:
