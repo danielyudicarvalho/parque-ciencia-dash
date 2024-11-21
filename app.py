@@ -330,7 +330,7 @@ def build_dashboard(df):
 
         html.Div([
             html.Img(
-                src='assets/logo-parque.jpeg',  # Caminho da imagem
+                src='assets/logo-t.png',  # Caminho da imagem
                 style={'height': '100px', 'margin-bottom': '20px'}  # Ajuste o estilo conforme necessário
             )
         ], className="text-center"),
