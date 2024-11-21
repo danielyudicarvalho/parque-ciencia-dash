@@ -292,13 +292,24 @@ def create_wordcloud(option_counts):
     Returns:
     - str: Base64 encoded image of the word cloud.
     """
-    text = ' '.join(option_counts['Option_Text'].values * option_counts['count'].values)
-    wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text)
-    
-    # Save wordcloud to a BytesIO object
+    # Usar frases completas como entradas únicas para a nuvem
+    text = ' '.join([f"{text} " * count for text, count in zip(option_counts['Option_Text'], option_counts['count'])])
+
+    # Gerar a nuvem de palavras com frases completas preservadas
+    wordcloud = WordCloud(
+        width=800,
+        height=400,
+        background_color='white',
+        collocations=False,  # Garante que palavras não sejam separadas
+        prefer_horizontal=1.0  # Mantém maior proporção de palavras horizontais
+    ).generate(text)
+
+    # Salvar a nuvem de palavras em um objeto BytesIO
     img = io.BytesIO()
     wordcloud.to_image().save(img, format='PNG')
     img.seek(0)
+    
+    # Codificar a imagem em base64
     encoded_image = base64.b64encode(img.read()).decode('utf-8')
     return f"data:image/png;base64,{encoded_image}"
 
@@ -332,9 +343,9 @@ def build_dashboard(df):
                 html.Img(
                     src='assets/logo-t.png',  # Caminho da imagem
                     style={
-                        'height': '150px',  # Aumente a altura
+                        'height': '500px',  # Aumente a altura
                         'width': 'auto',  # Mantém proporção
-                        'margin-bottom': '20px'  # Ajuste do espaçamento inferior
+                        'margin-bottom': '7px'  # Ajuste do espaçamento inferior
                     }
                 )
             ], className="text-center"),
