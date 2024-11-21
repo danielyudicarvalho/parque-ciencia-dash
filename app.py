@@ -556,7 +556,7 @@ def build_dashboard(df):
                         dcc.Graph(figure=figures['student_count']) if figures['student_count'] else html.Div("No data to display the students chart.")
                     ], width=6),
                     dbc.Col([
-                        html.H3("Total de visitas por distrito", style={'color': custom_styles['font_blue']}),
+                        html.H3("Total de visitas por cidade", style={'color': custom_styles['font_blue']}),
                         dcc.Graph(figure=figures['district_visits']) if figures['district_visits'] else html.Div("No data to display the visits chart.")
                     ], width=6),
                 ]),
@@ -565,7 +565,7 @@ def build_dashboard(df):
 
                 dbc.Row([
                     dbc.Col([
-                        html.H3("Avaliação média por distrito", style={'color': custom_styles['font_blue']}),
+                        html.H3("Avaliação média por cidade", style={'color': custom_styles['font_blue']}),
                         dcc.Graph(figure=figures['avg_rating']) if figures['avg_rating'] else html.Div("No data to display the average rating chart.")
                     ], width=6),
                     dbc.Col([
@@ -576,11 +576,11 @@ def build_dashboard(df):
 
                 html.Hr(),
 
-                html.H3("NPS por distrito"),
+                html.H3("NPS por cidade"),
                 dcc.Graph(
                     figure=px.bar(
                         figures['df_nps'], x='City_District', y='NPS',
-                        title='NPS por distrito (Satisfação dos visitantes)', color='NPS', color_continuous_scale='Viridis',
+                        title='NPS por cidade (Satisfação dos visitantes)', color='NPS', color_continuous_scale='Viridis',
                         labels={'City_District': 'District', 'NPS': 'NPS Score'}
                     )
                 ) if not figures['df_nps'].empty else html.Div("No data to display NPS by district."),
