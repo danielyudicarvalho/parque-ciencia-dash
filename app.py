@@ -127,7 +127,7 @@ def get_option_counts(df):
     options = options.values.flatten()
     options = pd.Series(options)
     option_counts = options.value_counts().dropna()
-    return option_counts.reset_index().rename(columns={'index': 'Texto', 0: 'count'})
+    return option_counts.reset_index().rename(columns={'index': 'Option_Text', 0: 'count'})
 
 def create_figures(df):
     """
@@ -150,8 +150,8 @@ def create_figures(df):
     df_option_counts = get_option_counts(df)
     if not df_option_counts.empty:
         figures['option_counts'] = px.bar(
-            df_option_counts, x='Texto', y='count',
-            title='Ocorrências das opções selecionadas', labels={'count': 'Quantidade', 'Texto': 'Opção'}
+            df_option_counts, x='Option_Text', y='count',
+            title='Ocorrências das opções selecionadas', labels={'count': 'Quantidade', 'Option_Text': 'Opção'}
         )
     else:
         figures['option_counts'] = None
@@ -262,7 +262,7 @@ def create_figures(df):
                     corr_matrix,
                     aspect='auto',
                     color_continuous_scale='Viridis',
-                    labels={'color': 'Avaliação Média'},
+                    labels={'color': 'Average Rating'},
                     title=''
                 )
             else:
