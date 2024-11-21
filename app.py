@@ -328,12 +328,16 @@ def build_dashboard(df):
     # Main layout with filters
     app.layout = dbc.Container([
 
-        html.Div([
-            html.Img(
-                src='assets/logo-t.png',  # Caminho da imagem
-                style={'height': '100px', 'margin-bottom': '20px'}  # Ajuste o estilo conforme necessário
-            )
-        ], className="text-center"),
+            html.Div([
+                html.Img(
+                    src='assets/logo-t.png',  # Caminho da imagem
+                    style={
+                        'height': '150px',  # Aumente a altura
+                        'width': 'auto',  # Mantém proporção
+                        'margin-bottom': '20px'  # Ajuste do espaçamento inferior
+                    }
+                )
+            ], className="text-center"),
                 # Filters
         dbc.Row([
             dbc.Col([
