@@ -314,7 +314,6 @@ def create_wordcloud(option_counts):
     return f"data:image/png;base64,{encoded_image}"
 
 
-
 def build_dashboard(df):
     """
     Build the Dash dashboard layout with interactive filters.
@@ -334,8 +333,6 @@ def build_dashboard(df):
     max_date = df['Visit_DateTime'].max().date() if not df['Visit_DateTime'].isnull().all() else None
     ratings = sorted(df['Rating'].dropna().unique())
 
-    
-
     # Main layout with filters
     app.layout = dbc.Container([
 
@@ -350,38 +347,37 @@ def build_dashboard(df):
                 )
             ], className="text-center"),
                 # Filters
-        dbc.Row([
-            dbc.Col([
+            html.Div([
                 html.Label("Colégio:", style={'color': custom_styles['font_blue']}),
                 dcc.Dropdown(
                     id='school-filter',
                     options=[{'label': school.title(), 'value': school} for school in school_names],
                     value=school_names,  # Select all schools by default
                     multi=True,
-                    placeholder="Select a school"
+                    placeholder="Select a school",
                 ),
-            ], md=3),
-            dbc.Col([
+                html.Br(),
+
                 html.Label("Cidade:", style={'color': custom_styles['font_blue']}),
                 dcc.Dropdown(
                     id='district-filter',
                     options=[{'label': district.title(), 'value': district} for district in city_districts],
                     value=city_districts,  # Select all districts by default
                     multi=True,
-                    placeholder="Select a district"
+                    placeholder="Select a district",
                 ),
-            ], md=3),
-            dbc.Col([
+                html.Br(),
+
                 html.Label("Voto:", style={'color': custom_styles['font_blue']}),
                 dcc.Dropdown(
                     id='rating-filter',
                     options=[{'label': str(rating), 'value': rating} for rating in ratings],
                     value=ratings,  # Select all ratings by default
                     multi=True,
-                    placeholder="Select a rating"
+                    placeholder="Select a rating",
                 ),
-            ], md=2),
-            dbc.Col([
+                html.Br(),
+
                 html.Label("Datas:", style={'color': custom_styles['font_blue']}),
                 dcc.DatePickerRange(
                     id='date-filter',
@@ -393,9 +389,7 @@ def build_dashboard(df):
                     start_date_placeholder_text='Start Date',
                     end_date_placeholder_text='End Date',
                 ),
-            ], md=4),
-            html.H1(children='Parque da Ciência - Dashboard', className="text-center my-4", style={'color': custom_styles['font_blue']}),
-        ], className="mb-4"),
+            ], className="mb-4"),
 
         # Metrics cards (will be updated via callback)
         html.Div(id='cards-metrics'),
@@ -520,30 +514,39 @@ def build_dashboard(df):
             avg_rating = round(df_filtered['Rating'].mean(), 2)
 
             # Metrics cards
-            cards = dbc.Row([
-            dbc.Col(dbc.Card(
-                dbc.CardBody([
-                    html.H4("Pontuação geral do NPS", className="card-title", style={'color': 'white'}),
-                    html.H2(df_nps, className="card-text", style={'color': 'white'}),
-                ]),
-                color=custom_styles['card_colors'][0], inverse=True
-            ), width=4),
-            dbc.Col(dbc.Card(
-                dbc.CardBody([
-                    html.H4("Total de visitantes", className="card-title", style={'color': 'white'}),
-                    html.H2(total_visitors, className="card-text", style={'color': 'white'}),
-                ]),
-                color=custom_styles['card_colors'][1], inverse=True
-            ), width=4),
-            dbc.Col(dbc.Card(
-                dbc.CardBody([
-                    html.H4("Avaliação média", className="card-title", style={'color': 'white'}),
-                    html.H2(avg_rating, className="card-text", style={'color': 'white'}),
-                ]),
-                color=custom_styles['card_colors'][2], inverse=True
-            ), width=4),
-        ], className="mb-4"),
-
+            # Metrics cards em coluna
+            cards = dbc.Col([
+                dbc.Card(
+                    dbc.CardBody([
+                        html.H4("Pontuação geral do NPS", className="card-title", style={'color': 'white'}),
+                        html.H2(df_nps, className="card-text", style={'color': 'white'}),
+                    ]),
+                    color=custom_styles['card_colors'][0],
+                    inverse=True,
+                    className="mb-3",
+                    style={'maxWidth': '600px', 'margin': '0 auto'}  # Define a largura e centraliza o cartão
+                ),
+                dbc.Card(
+                    dbc.CardBody([
+                        html.H4("Total de visitantes", className="card-title", style={'color': 'white'}),
+                        html.H2(total_visitors, className="card-text", style={'color': 'white'}),
+                    ]),
+                    color=custom_styles['card_colors'][1],
+                    inverse=True,
+                    className="mb-3",
+                    style={'maxWidth': '600px', 'margin': '0 auto'}
+                ),
+                dbc.Card(
+                    dbc.CardBody([
+                        html.H4("Avaliação média", className="card-title", style={'color': 'white'}),
+                        html.H2(avg_rating, className="card-text", style={'color': 'white'}),
+                    ]),
+                    color=custom_styles['card_colors'][2],
+                    inverse=True,
+                    className="mb-3",
+                    style={'maxWidth': '600px', 'margin': '0 auto'}
+                ),
+            ], width=12)
 
             # Recreate figures with filtered data
             figures = create_figures(df_filtered)
@@ -591,20 +594,28 @@ def build_dashboard(df):
 
                 html.Hr(),
 
-                html.H3("NPS por cidade"),
-                dcc.Graph(
-                    figure=px.bar(
-                        figures['df_nps'], x='City_District', y='NPS',
-                        title='NPS por cidade (Satisfação dos visitantes)', color='NPS', color_continuous_scale='Viridis',
-                        labels={'City_District': 'District', 'NPS': 'NPS Score'}
-                    )
-                ) if not figures['df_nps'].empty else html.Div("No data to display NPS by district."),
+                dbc.Row([
+                    dbc.Col([
+                        html.H3("NPS por cidade", style={'color': custom_styles['font_blue']}),
+                        dcc.Graph(
+                            figure=px.bar(
+                                figures['df_nps'], x='City_District', y='NPS',
+                                title='NPS por cidade (Satisfação dos visitantes)', color='NPS', color_continuous_scale='Viridis',
+                                labels={'City_District': 'District', 'NPS': 'NPS Score'}
+                            )
+                        ) if not figures['df_nps'].empty else html.Div("No data to display NPS by district."),
+                    ], width=6),
+                    dbc.Col([
+                        html.H3("Análise de Promotores, Passivos e Detratores", style={'color': custom_styles['font_blue']}),
+                        dcc.Graph(figure=figures['nps_breakdown']) if figures['nps_breakdown'] else html.Div("No data to display the NPS breakdown chart."),
+                    ], width=6),
+                ]),
 
                 html.Hr(),
 
                 dbc.Row([
                     dbc.Col([
-                        html.H3("Visitas por data", style={'color': custom_styles['font_blue']}),
+                        html.H3("Visitas por período", style={'color': custom_styles['font_blue']}),
                         dcc.Graph(figure=figures['visits_by_day']) if figures['visits_by_day'] else html.Div('Date data unavailable.')
                     ], width=6),
                     dbc.Col([
@@ -612,11 +623,6 @@ def build_dashboard(df):
                         dcc.Graph(figure=figures['visits_by_hour']) if figures['visits_by_hour'] else html.Div('Hour data unavailable.')
                     ], width=6),
                 ]),
-
-                html.Hr(),
-
-                html.H3("Análise de Promotores, Passivos e Detratores", style={'color': custom_styles['font_blue']}),
-                dcc.Graph(figure=figures['nps_breakdown']) if figures['nps_breakdown'] else html.Div("No data to display the NPS breakdown chart."),
 
                 html.Hr(),
 
@@ -644,8 +650,8 @@ def main():
     app = build_dashboard(df_processed)
 
     # Run the app
-    #app.run_server(debug=True)
-    app.run_server(debug=True, host='0.0.0.0', port=8080)
+    app.run_server(debug=True)
+    #app.run_server(debug=True, host='0.0.0.0', port=8080)
 
 
 if __name__ == '__main__':
