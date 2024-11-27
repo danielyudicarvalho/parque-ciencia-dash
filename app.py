@@ -7,6 +7,7 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import dash_bootstrap_components as dbc
 
 from dash.dependencies import Input, Output
 from wordcloud import WordCloud
@@ -442,14 +443,14 @@ def build_dashboard(df):
 
         html.Hr(),
 
-        html.H3("Visitor Feedbacks", style={'color': custom_styles['font_blue']}),
-        dash_table.DataTable(
-            id='table-feedbacks',
-            page_size=10,
-            style_table={'overflowX': 'auto'},
-            style_cell={'textAlign': 'left'},
-            style_header={'backgroundColor': 'rgb(230, 230, 230)', 'fontWeight': 'bold'},
-        ),
+        # html.H3("Visitor Feedbacks", style={'color': custom_styles['font_blue']}),
+        # dash_table.DataTable(
+        #     id='table-feedbacks',
+        #     page_size=10,
+        #     style_table={'overflowX': 'auto'},
+        #     style_cell={'textAlign': 'left'},
+        #     style_header={'backgroundColor': 'rgb(230, 230, 230)', 'fontWeight': 'bold'},
+        # ),
 
         html.Footer("Developed by Daniel Yudi de Carvalho", className="text-center mt-4 mb-2")
     ], fluid=True)
@@ -459,7 +460,6 @@ def build_dashboard(df):
         [
             Output('cards-metrics', 'children'),
             Output('graphs-content', 'children'),
-            Output('table-feedbacks', 'data'),
         ],
         [
             Input('school-filter', 'value'),
@@ -469,6 +469,7 @@ def build_dashboard(df):
             Input('date-filter', 'end_date'),
         ]
     )
+
     def update_dashboard(selected_schools, selected_districts, selected_ratings, start_date, end_date):
         """
         Update the dashboard content based on selected filters.
@@ -546,7 +547,7 @@ def build_dashboard(df):
 
             table_data = []
 
-            return cards, graphs, table_data
+            return cards, graphs
         else:
             # Recalculate metrics and figures with filtered data
             nps_score, df_nps = calculate_nps(df_filtered)
@@ -595,15 +596,77 @@ def build_dashboard(df):
 
             # Graphs content
             graphs = html.Div([
-                dbc.Row([
+               dbc.Row([
                     dbc.Col([
-                        html.H3("Ocorrências das opções selecionadas", style={'color': custom_styles['font_blue']}),
+                        html.H3([
+                            "Ocorrências das opções selecionadas",
+                            html.Span(
+                                " ⓘ",
+                                id="tooltip-target-option-counts",
+                                style={"cursor": "pointer", "color": custom_styles['font_blue'], "margin-left": "10px"}
+                            )
+                        ], style={'color': custom_styles['font_blue']}),
                         html.Img(src=wordcloud_image, style={'width': '100%'}) if wordcloud_image else html.Div("No data to display the options chart."),
-                        #dcc.Graph(figure=figures['option_counts']) if figures['option_counts'] else html.Div("No data to display the options chart.")
+                        dbc.Tooltip(
+                            "Este gráfico mostra uma nuvem das opções mais selecionadas pelos visitantes, destacando as preferências mais comuns.",
+                            target="tooltip-target-option-counts",
+                            placement="top",
+                        ),
+                        # dcc.Graph(figure=figures['option_counts']) if figures['option_counts'] else html.Div("No data to display the options chart.")
                     ], width=6),
                     dbc.Col([
-                        html.H3("Ocorrências por  Cidades",style={'color': custom_styles['font_blue']}),
-                        dcc.Graph(figure=figures['city_district_counts']) if figures['city_district_counts'] else html.Div("No data to display the districts chart.")
+                        html.H3([
+                            "Ocorrências por Cidades",
+                            html.Span(
+                                " ⓘ",
+                                id="tooltip-target-city-district-counts",
+                                style={"cursor": "pointer", "color": custom_styles['font_blue'], "margin-left": "10px"}
+                            )
+                        ], style={'color': custom_styles['font_blue']}),
+                        dcc.Graph(figure=figures['city_district_counts']) if figures['city_district_counts'] else html.Div("No data to display the districts chart."),
+                        dbc.Tooltip(
+                            "Este gráfico mostra o número de ocorrências por cidade, permitindo identificar as localidades com maior interação.",
+                            target="tooltip-target-city-district-counts",
+                            placement="top",
+                        ),
+                    ], width=6),
+                ]),
+
+
+                html.Hr(),
+
+                dbc.Row([
+                     dbc.Col([
+                        html.H3([
+                            "Total de alunos por escola",
+                            html.Span(
+                                " ⓘ",
+                                id="tooltip-target-student-count",
+                                style={"cursor": "pointer", "color": custom_styles['font_blue'], "margin-left": "10px"}
+                            )
+                        ], style={'color': custom_styles['font_blue']}),
+                        dcc.Graph(figure=figures['student_count']) if figures['student_count'] else html.Div("No data to display the students chart."),
+                        dbc.Tooltip(
+                            "Este gráfico mostra o total de alunos visitantes de cada escola, permitindo uma análise da distribuição de estudantes.",
+                            target="tooltip-target-student-count",
+                            placement="top",
+                        ),
+                    ], width=6),
+                    dbc.Col([
+                        html.H3([
+                            "Total de visitas por cidade",
+                            html.Span(
+                                " ⓘ",
+                                id="tooltip-target-district-visits",
+                                style={"cursor": "pointer", "color": custom_styles['font_blue'], "margin-left": "10px"}
+                            )
+                        ], style={'color': custom_styles['font_blue']}),
+                        dcc.Graph(figure=figures['district_visits']) if figures['district_visits'] else html.Div("No data to display the visits chart."),
+                        dbc.Tooltip(
+                            "Este gráfico mostra o número total de visitas por cidade, o que ajuda a entender quais cidades têm maior presença.",
+                            target="tooltip-target-district-visits",
+                            placement="top",
+                        ),
                     ], width=6),
                 ]),
 
@@ -611,12 +674,36 @@ def build_dashboard(df):
 
                 dbc.Row([
                     dbc.Col([
-                        html.H3("Total de alunos por escola", style={'color': custom_styles['font_blue']}),
-                        dcc.Graph(figure=figures['student_count']) if figures['student_count'] else html.Div("No data to display the students chart.")
-                    ], width=6),
+                        html.H3([
+                            "Avaliação média por cidade",
+                            html.Span(
+                                " ⓘ",
+                                id="tooltip-target-avg-rating",
+                                style={"cursor": "pointer", "color": custom_styles['font_blue'], "margin-left": "10px"}
+                            )
+                        ], style={'color': custom_styles['font_blue']}),
+                        dcc.Graph(figure=figures['avg_rating']) if figures['avg_rating'] else html.Div("No data to display the average rating chart."),
+                        dbc.Tooltip(
+                            "Este gráfico mostra a avaliação média dos visitantes por cidade.",
+                            target="tooltip-target-avg-rating",
+                            placement="top",
+                            ),
+                        ], width=6),
                     dbc.Col([
-                        html.H3("Total de visitas por cidade", style={'color': custom_styles['font_blue']}),
-                        dcc.Graph(figure=figures['district_visits']) if figures['district_visits'] else html.Div("No data to display the visits chart.")
+                        html.H3([
+                            "Distribuição de visitantes por faixa etária",
+                            html.Span(
+                                " ⓘ",
+                                id="tooltip-target-age-distribution",
+                                style={"cursor": "pointer", "color": custom_styles['font_blue'], "margin-left": "10px"}
+                            )
+                        ], style={'color': custom_styles['font_blue']}),
+                        dcc.Graph(figure=figures['age_distribution']) if figures['age_distribution'] else html.Div("No data to display the age group chart."),
+                        dbc.Tooltip(
+                            "Este gráfico mostra a distribuição dos visitantes de acordo com sua faixa etária.",
+                            target="tooltip-target-age-distribution",
+                            placement="top",
+                        ),
                     ], width=6),
                 ]),
 
@@ -624,31 +711,43 @@ def build_dashboard(df):
 
                 dbc.Row([
                     dbc.Col([
-                        html.H3("Avaliação média por cidade", style={'color': custom_styles['font_blue']}),
-                        dcc.Graph(figure=figures['avg_rating']) if figures['avg_rating'] else html.Div("No data to display the average rating chart.")
-                    ], width=6),
-                    dbc.Col([
-                        html.H3("Distribuição de visitantes por faixa etária", style={'color': custom_styles['font_blue']}),
-                        dcc.Graph(figure=figures['age_distribution']) if figures['age_distribution'] else html.Div("No data to display the age group chart.")
-                    ], width=6),
-                ]),
-
-                html.Hr(),
-
-                dbc.Row([
-                    dbc.Col([
-                        html.H3("NPS por cidade", style={'color': custom_styles['font_blue']}),
+                        html.H3([
+                            "NPS por cidade",
+                            html.Span(
+                                " ⓘ",
+                                id="tooltip-target-nps-city",
+                                style={"cursor": "pointer", "color": custom_styles['font_blue'], "margin-left": "10px"}
+                            )
+                        ], style={'color': custom_styles['font_blue']}),
                         dcc.Graph(
                             figure=px.bar(
                                 figures['df_nps'], x='City_District', y='NPS',
-                                title='NPS por cidade (Satisfação dos visitantes)', color='NPS', color_continuous_scale='Viridis',
-                                labels={'City_District': 'District', 'NPS': 'NPS Score'}
+                                title='',  # Remover título duplicado dentro do gráfico
+                                color='NPS', color_continuous_scale='Viridis',
+                                labels={'City_District': 'Cidade', 'NPS': 'Pontuação NPS'}
                             )
                         ) if not figures['df_nps'].empty else html.Div("No data to display NPS by district."),
+                        dbc.Tooltip(
+                            "Este gráfico mostra a pontuação NPS por cidade, indicando a satisfação dos visitantes em diferentes locais.",
+                            target="tooltip-target-nps-city",
+                            placement="top",
+                        ),
                     ], width=6),
                     dbc.Col([
-                        html.H3("Análise de Promotores, Passivos e Detratores", style={'color': custom_styles['font_blue']}),
+                        html.H3([
+                            "Análise de Promotores, Passivos e Detratores",
+                            html.Span(
+                                " ⓘ",
+                                id="tooltip-target-nps-breakdown",
+                                style={"cursor": "pointer", "color": custom_styles['font_blue'], "margin-left": "10px"}
+                            )
+                        ], style={'color': custom_styles['font_blue']}),
                         dcc.Graph(figure=figures['nps_breakdown']) if figures['nps_breakdown'] else html.Div("No data to display the NPS breakdown chart."),
+                        dbc.Tooltip(
+                            "Este gráfico mostra a proporção de promotores, passivos e detratores com base nas avaliações dos visitantes.",
+                            target="tooltip-target-nps-breakdown",
+                            placement="top",
+                        ),
                     ], width=6),
                 ]),
 
@@ -656,25 +755,63 @@ def build_dashboard(df):
 
                 dbc.Row([
                     dbc.Col([
-                        html.H3("Visitas por período", style={'color': custom_styles['font_blue']}),
-                        dcc.Graph(figure=figures['visits_by_day']) if figures['visits_by_day'] else html.Div('Date data unavailable.')
+                        html.H3([
+                            "Visitas por período",
+                            html.Span(
+                                " ⓘ",
+                                id="tooltip-target-visits-period",
+                                style={"cursor": "pointer", "color": custom_styles['font_blue'], "margin-left": "10px"}
+                            )
+                        ], style={'color': custom_styles['font_blue']}),
+                        dcc.Graph(figure=figures['visits_by_day']) if figures['visits_by_day'] else html.Div('Date data unavailable.'),
+                        dbc.Tooltip(
+                            "Este gráfico mostra o total de visitas ao longo de diferentes dias, ajudando a identificar tendências ao longo do tempo.",
+                            target="tooltip-target-visits-period",
+                            placement="top",
+                        ),
                     ], width=6),
                     dbc.Col([
-                        html.H3("Visitas por hora", style={'color': custom_styles['font_blue']}),
-                        dcc.Graph(figure=figures['visits_by_hour']) if figures['visits_by_hour'] else html.Div('Hour data unavailable.')
+                        html.H3([
+                            "Visitas por hora",
+                            html.Span(
+                                " ⓘ",
+                                id="tooltip-target-visits-hour",
+                                style={"cursor": "pointer", "color": custom_styles['font_blue'], "margin-left": "10px"}
+                            )
+                        ], style={'color': custom_styles['font_blue']}),
+                        dcc.Graph(figure=figures['visits_by_hour']) if figures['visits_by_hour'] else html.Div('Hour data unavailable.'),
+                        dbc.Tooltip(
+                            "Este gráfico mostra o número de visitas ao longo das horas do dia, ajudando a identificar horários de maior movimento.",
+                            target="tooltip-target-visits-hour",
+                            placement="top",
+                        ),
                     ], width=6),
                 ]),
 
+
                 html.Hr(),
 
-                html.H3("Correlação entre Opções e Votos", style={'color': custom_styles['font_blue']}),
+                html.H3([
+                    "Correlação entre Opções e Votos",
+                    html.Span(
+                        " ⓘ",
+                        id="tooltip-target-correlation-options",
+                        style={"cursor": "pointer", "color": custom_styles['font_blue'], "margin-left": "10px"}
+                    )
+                ], style={'color': custom_styles['font_blue']}),
                 dcc.Graph(figure=figures['heatmap']) if figures['heatmap'] else html.Div("No data to display the heatmap."),
+                dbc.Tooltip(
+                    "Este gráfico mostra a correlação entre as diferentes opções escolhidas pelos visitantes e as notas atribuídas. As cores representam a média das avaliações.",
+                    target="tooltip-target-correlation-options",
+                    placement="top",
+                ),
+
             ])
 
             # Data for the feedbacks table
             table_data = df_filtered.to_dict('records')
 
-            return cards, graphs, table_data
+            return cards, graphs
 
     return app  # Ensure that the 'app' object is returned at the end of the function
 
