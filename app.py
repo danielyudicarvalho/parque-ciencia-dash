@@ -6,11 +6,14 @@ from dash import Dash, dcc, html, dash_table
 import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
+
 from dash.dependencies import Input, Output
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import io
 import base64
+
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -151,7 +154,7 @@ def create_figures(df):
     if not df_option_counts.empty:
         figures['option_counts'] = px.bar(
             df_option_counts, x='Option_Text', y='count',
-            title='Ocorrências das opções selecionadas', labels={'count': 'Quantidade', 'Option_Text': 'Opção'}
+            labels={'count': 'Quantidade', 'Option_Text': 'Opção'}
         )
     else:
         figures['option_counts'] = None
@@ -162,7 +165,7 @@ def create_figures(df):
     if not df_city_district_counts.empty:
         figures['city_district_counts'] = px.bar(
             df_city_district_counts, x='City_District', y='count',
-            title='Ocorrências por Cidades', labels={'count': 'Quantidade', 'City_District': 'Cidade'}
+            labels={'count': 'Quantidade', 'City_District': 'Cidade'}
         )
     else:
         figures['city_district_counts'] = None
@@ -172,7 +175,7 @@ def create_figures(df):
     if not df_student_count.empty:
         figures['student_count'] = px.bar(
             df_student_count, x='School_Name', y='Student_Count',
-            title='Total de alunos por escola', labels={'Student_Count': 'Número de estudantes', 'School_Name': 'Colégio'}
+            labels={'Student_Count': 'Número de estudantes', 'School_Name': 'Colégio'}
         )
     else:
         figures['student_count'] = None
@@ -182,7 +185,7 @@ def create_figures(df):
     if not df_district_visits.empty:
         figures['district_visits'] = px.bar(
             df_district_visits, x='City_District', y='Student_Count',
-            title='Total de visitas Cidade', labels={'Student_Count': 'Número de visitantes', 'City_District': 'Cidade'}
+            labels={'Student_Count': 'Número de visitantes', 'City_District': 'Cidade'}
         )
     else:
         figures['district_visits'] = None
@@ -192,7 +195,7 @@ def create_figures(df):
     if not df_avg_rating.empty:
         figures['avg_rating'] = px.bar(
             df_avg_rating, x='City_District', y='Rating',
-            title='Avaliação média por Cidade', labels={'Rating': 'Avaliação Médio', 'City_District': 'Cidade'}
+            labels={'Rating': 'Avaliação Média', 'City_District': 'Cidade'}
         )
     else:
         figures['avg_rating'] = None
@@ -202,7 +205,7 @@ def create_figures(df):
     if not df_age_distribution.empty:
         figures['age_distribution'] = px.bar(
             df_age_distribution, x='Age_Group', y='Student_Count',
-            title='Distribuição de visitantes por faixa etária', labels={'Student_Count': 'Quantidades de visitantes', 'Age_Group': 'Grupo de idade'}
+            labels={'Student_Count': 'Quantidade de visitantes', 'Age_Group': 'Grupo de idade'}
         )
     else:
         figures['age_distribution'] = None
@@ -213,7 +216,7 @@ def create_figures(df):
         if not df_visits_by_day.empty:
             figures['visits_by_day'] = px.line(
                 df_visits_by_day, x='Date', y='Student_Count',
-                title='Visitas por data', labels={'Student_Count': 'Quantidade de visitantes', 'Date': 'Data'}
+                labels={'Student_Count': 'Quantidade de visitantes', 'Date': 'Data'}
             )
         else:
             figures['visits_by_day'] = None
@@ -226,7 +229,7 @@ def create_figures(df):
         if not df_visits_by_hour.empty:
             figures['visits_by_hour'] = px.line(
                 df_visits_by_hour, x='Hour', y='Student_Count',
-                title='Visitas por hora', labels={'Student_Count': 'Quantidade de visitantes', 'Hour': 'Horas por dia'}
+                labels={'Student_Count': 'Quantidade de visitantes', 'Hour': 'Horas por dia'}
             )
         else:
             figures['visits_by_hour'] = None
@@ -238,13 +241,12 @@ def create_figures(df):
     nps_counts.columns = ['Group', 'count']
     if not nps_counts.empty:
         figures['nps_breakdown'] = px.pie(
-            nps_counts, names='Group', values='count',
-            title='Análise de Promotores, Passivos e Detratores'
+            nps_counts, names='Group', values='count'
         )
     else:
         figures['nps_breakdown'] = None
 
-    # Correlation between Options and Rating
+    # Correlation between Options and Rating (Top 10 most common options)
     df_options_melted = df.melt(
         id_vars=['Rating'],
         value_vars=['Option_1', 'Option_2', 'Option_3', 'Option_4'],
@@ -253,8 +255,11 @@ def create_figures(df):
     )
     df_options_melted = df_options_melted.dropna(subset=['Option_Text'])
 
-    if not df_options_melted.empty:
-        df_option_rating_corr = df_options_melted.groupby('Option_Text')['Rating'].mean().reset_index()
+    top_options = df_options_melted['Option_Text'].value_counts().nlargest(10).index
+    df_filtered_options = df_options_melted[df_options_melted['Option_Text'].isin(top_options)]
+
+    if not df_filtered_options.empty:
+        df_option_rating_corr = df_filtered_options.groupby('Option_Text')['Rating'].mean().reset_index()
         if not df_option_rating_corr.empty:
             corr_matrix = df_option_rating_corr.set_index('Option_Text')
             if not corr_matrix.empty:
@@ -262,8 +267,7 @@ def create_figures(df):
                     corr_matrix,
                     aspect='auto',
                     color_continuous_scale='Viridis',
-                    labels={'color': 'Avaliação Média'},
-                    title=''
+                    labels={'color': 'Avaliação Média'}
                 )
             else:
                 figures['heatmap'] = None
@@ -271,8 +275,16 @@ def create_figures(df):
             figures['heatmap'] = None
     else:
         figures['heatmap'] = None
+# Remove titles from all figures to avoid duplication
+    # Remove titles from all figures to avoid duplication
+    for key, figure in figures.items():
+        if isinstance(figure, go.Figure):  # Verificar se o objeto é um gráfico do Plotly
+            figure.update_layout(title=None)
+
+
 
     return figures
+
 
 custom_styles = {
     'primary': '#0288d1',  # Main blue color for headers and text
@@ -334,19 +346,43 @@ def build_dashboard(df):
     ratings = sorted(df['Rating'].dropna().unique())
 
     # Main layout with filters
-    app.layout = dbc.Container([
+    app.layout = dbc.Container([            
 
-            html.Div([
-                html.Img(
-                    src='assets/logo-t.png',  # Caminho da imagem
-                    style={
-                        'height': '500px',  # Aumente a altura
-                        'width': 'auto',  # Mantém proporção
-                        'margin-bottom': '7px'  # Ajuste do espaçamento inferior
-                    }
-                )
-            ], className="text-center"),
+            dbc.Row([
+                   dbc.Col([
+                        html.Img(
+                            src='assets/logo-ufms.png',  # Caminho para a imagem do logo da UFMS
+                            style={
+                                'height': '150px',  # Ajustar a altura conforme necessário
+                                'width': 'auto',
+                                'margin-left': '10px',  # Espaçamento para melhor posicionamento
+                            }
+                        )
+                    ], width=2),  # Definindo a largura da coluna
+                    # Coluna com o título centralizado
+                    dbc.Col([
+                        html.H1(
+                            "Parque da Ciência Dashboard",
+                            className="text-center",
+                            style={'margin-top': '20px', 'color': custom_styles['font_blue']}
+                        )
+                    ], width=8), 
+                    dbc.Col([
+                            html.Img(
+                                src='assets/logo-t.png',  # Caminho para a outra imagem
+                                style={
+                                    'height': '200px',  # Ajustar a altura conforme necessário
+                                    'width': 'auto',
+                                    'margin-right': '10px',  # Espaçamento para melhor posicionamento
+                                    'float': 'right'  # Alinhar o logo à direita
+                                }
+                            )
+                        ], width=2),  # Definindo a largura da coluna
+            ], align="center", style={'margin-bottom': '20px'}),
+
+         
                 # Filters
+            # Filters
             html.Div([
                 html.Label("Colégio:", style={'color': custom_styles['font_blue']}),
                 dcc.Dropdown(
@@ -355,6 +391,7 @@ def build_dashboard(df):
                     value=school_names,  # Select all schools by default
                     multi=True,
                     placeholder="Select a school",
+                    style={'width': '70%'}  # Diminuindo a largura do dropdown
                 ),
                 html.Br(),
 
@@ -365,6 +402,7 @@ def build_dashboard(df):
                     value=city_districts,  # Select all districts by default
                     multi=True,
                     placeholder="Select a district",
+                    style={'width': '70%'}  # Diminuindo a largura do dropdown
                 ),
                 html.Br(),
 
@@ -375,6 +413,7 @@ def build_dashboard(df):
                     value=ratings,  # Select all ratings by default
                     multi=True,
                     placeholder="Select a rating",
+                    style={'width': '70%'}  # Diminuindo a largura do dropdown
                 ),
                 html.Br(),
 
@@ -388,8 +427,10 @@ def build_dashboard(df):
                     display_format='DD/MM/YYYY',
                     start_date_placeholder_text='Start Date',
                     end_date_placeholder_text='End Date',
+                    style={'width': '70%'}  # Diminuindo a largura do date picker
                 ),
             ], className="mb-4"),
+
 
         # Metrics cards (will be updated via callback)
         html.Div(id='cards-metrics'),
@@ -626,7 +667,7 @@ def build_dashboard(df):
 
                 html.Hr(),
 
-                html.H3("Correlação entre Opções e Rating", style={'color': custom_styles['font_blue']}),
+                html.H3("Correlação entre Opções e Votos", style={'color': custom_styles['font_blue']}),
                 dcc.Graph(figure=figures['heatmap']) if figures['heatmap'] else html.Div("No data to display the heatmap."),
             ])
 
@@ -650,8 +691,8 @@ def main():
     app = build_dashboard(df_processed)
 
     # Run the app
-    #app.run_server(debug=True)
-    app.run_server(debug=True, host='0.0.0.0', port=8080)
+    app.run_server(debug=True)
+    #app.run_server(debug=True, host='0.0.0.0', port=8080)
 
 
 if __name__ == '__main__':
