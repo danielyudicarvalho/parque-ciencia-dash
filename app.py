@@ -691,8 +691,8 @@ def main():
     app = build_dashboard(df_processed)
 
     # Run the app
-    app.run_server(debug=True)
-    #app.run_server(debug=True, host='0.0.0.0', port=8080)
+    #app.run_server(debug=True)
+    app.run_server(debug=True, host='0.0.0.0', port=8080)
 
 
 if __name__ == '__main__':
