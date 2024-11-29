@@ -65,6 +65,8 @@ def process_data(df):
         df[col] = df[col].str.replace(r'\s+', ' ', regex=True)  # Remove multiple spaces
 
     # Convert 'Visit_DateTime' to datetime
+    df['City_District'] = df['City_District'].str.title()
+    df['School_Name'] = df['School_Name'].str.title()
     df['Visit_DateTime'] = pd.to_datetime(df['Visit_DateTime'], errors='coerce')
     df['Rating'] = pd.to_numeric(df['Rating'], errors='coerce')
     df['Student_Count'] = pd.to_numeric(df['Student_Count'], errors='coerce')
