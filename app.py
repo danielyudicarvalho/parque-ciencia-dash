@@ -618,7 +618,7 @@ def build_dashboard(df):
                     ], width=6),
                     dbc.Col([
                         html.H3([
-                            "Ocorrências por Cidades",
+                            "Quantidade de Escolas por Cidades",
                             html.Span(
                                 " ⓘ",
                                 id="tooltip-target-city-district-counts",
@@ -627,7 +627,7 @@ def build_dashboard(df):
                         ], style={'color': custom_styles['font_blue']}),
                         dcc.Graph(figure=figures['city_district_counts']) if figures['city_district_counts'] else html.Div("No data to display the districts chart."),
                         dbc.Tooltip(
-                            "Este gráfico mostra o número de ocorrências por cidade, permitindo identificar as localidades com maior interação.",
+                            "Este gráfico mostra o número de escolas que visitaram o parque por cidade, permitindo identificar as localidades com maior interação.",
                             target="tooltip-target-city-district-counts",
                             placement="top",
                         ),
