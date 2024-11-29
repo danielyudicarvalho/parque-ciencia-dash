@@ -1,0 +1,11 @@
+School_Name,Server_Responsible,Student_Count,Visit_DateTime,Rating,Feedback,Option_1,Option_2,Option_3,Option_4,Min_Age,Max_Age,City_District
+ufmg,Lucas,40,2024-11-02 10:00,4,"Atividades muito boas, ambiente agradável",Variedade de atrações,Ambiente agradável,null,null,18,30,belo horizonte
+ufmg,Lucas,40,2024-11-02 10:00,5,"Excelentes monitores e ótima estrutura",Bons monitores,Ótima estrutura,null,null,18,30,belo horizonte
+usp,João,45,2024-11-03 11:30,3,"Algumas atrações estavam boas, mas faltava interação",Precisa de mais interatividade,Bons monitores,null,null,19,28,são paulo
+usp,João,45,2024-11-03 11:30,4,"Bom atendimento, estrutura organizada",Bom atendimento,Ótima organização,null,null,19,28,são paulo
+ufpb,Mariana,27,2024-11-04 13:00,2,"Achei que a infraestrutura precisa de algumas melhorias",Precisa de manutenção,Precisa de melhorias,null,null,17,24,joão pessoa
+ufpb,Mariana,27,2024-11-04 13:00,3,"Gostei da visita, mas faltou algumas atividades",Precisa de mais atrações,Variedade de atrações,null,null,17,24,joão pessoa
+ufc,Pedro,32,2024-11-05 09:45,5,"Ótima visita, monitores super preparados e atenciosos",Bons monitores,Ótima organização,null,null,20,26,fortaleza
+ufc,Pedro,32,2024-11-05 09:45,4,"Estrutura bem organizada, mas poderia ter mais atividades",Ótima organização,Precisa de mais atrações,null,null,20,26,fortaleza
+ufsc,Ana,30,2024-11-06 14:00,4,"Gostei das atividades, mas precisa de mais interatividade",Variedade de atividades,Precisa de mais interatividade,null,null,18,27,florianópolis
+ufsc,Ana,30,2024-11-06 14:00,5,"Excelente ambiente e atendimento, adorei a visita",Ambiente agradável,Bom atendimento,null,null,18,27,florianópolis

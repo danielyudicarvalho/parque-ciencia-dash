@@ -1,0 +1,11 @@
+School_Name,Server_Responsible,Student_Count,Visit_DateTime,Rating,Feedback,Option_1,Option_2,Option_3,Option_4,Min_Age,Max_Age,City_District
+ufmg,Juliana,29,2024-10-05 09:00,3,"Boas atrações, mas poderia ter mais envolvimento dos monitores",Boas atrações mas achei um pouco confuso,null,null,null,16,20,belo horizonte
+ufmg,Juliana,29,2024-10-05 09:00,4,"Gostei bastante da diversidade das atividades",Variedade de atrações,Aprendizagem interessante,null,null,16,20,belo horizonte
+unesp,João,26,2024-10-06 10:45,5,"Experiência muito positiva, ótima organização",Bom atendimento,Ótima estrutura,Variedade de atrações,null,17,21,botucatu
+unesp,João,26,2024-10-06 10:45,4,"Monitores foram atenciosos e ajudaram a tornar a experiência agradável",Bom atendimento,Bom para todas as idades,null,null,17,21,botucatu
+ufrn,Paula,31,2024-10-07 14:00,2,"Falta de organização prejudicou a experiência",Precisa de mais funcionários,null,null,null,18,24,natal
+ufrn,Paula,31,2024-10-07 14:00,3,"Atrações são interessantes, mas precisam de manutenção",Atrações interessantes,Mas falta de manutenção,null,null,18,24,natal
+usp,Marcos,45,2024-10-08 11:30,5,"Gostei de todas as atividades e da organização",Bom atendimento,Aprendizagem interessante,Ótima organização,null,19,23,são paulo
+usp,Marcos,45,2024-10-08 11:30,4,"Bons monitores e atividades educativas",Bom atendimento,Atividades interativas,null,null,19,23,são paulo
+ufrj,Clara,34,2024-10-09 13:15,4,"As atividades eram interessantes, mas algumas poderiam ser mais dinâmicas",Aprendizagem interessante,Bom atendimento,null,null,18,22,rio de janeiro
+ufrj,Clara,34,2024-10-09 13:15,3,"Achei a organização um pouco confusa",Boas atrações mas achei um pouco confuso,null,null,null,18,22,rio de janeiro

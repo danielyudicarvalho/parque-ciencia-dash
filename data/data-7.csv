@@ -1,0 +1,11 @@
+School_Name,Server_Responsible,Student_Count,Visit_DateTime,Rating,Feedback,Option_1,Option_2,Option_3,Option_4,Min_Age,Max_Age,City_District
+ufpel,Camila,28,2024-10-10 09:30,3,"Variedade boa, mas precisa de melhorias na infraestrutura",Variedade de atrações,Precisa de melhorias na estrutura,null,null,14,18,pelotas
+ufpel,Camila,28,2024-10-10 09:30,4,"Atendimento excelente, atividades muito boas",Bom atendimento,Bom para todas as idades,null,null,14,18,pelotas
+ufba,Henrique,30,2024-10-11 11:00,5,"Adorei a experiência, tudo muito bem organizado",Bom atendimento,Ótima estrutura,Aprendizagem interessante,null,16,20,salvador
+ufba,Henrique,30,2024-10-11 11:00,4,"Bons monitores, experiência bastante educativa",Bons monitores,Variedade de atividades,null,null,16,20,salvador
+unb,Fernanda,35,2024-10-12 10:15,2,"Achei as atrações desatualizadas e a manutenção precária",Precisa de mais manutenção,null,null,null,17,21,brasília
+unb,Fernanda,35,2024-10-12 10:15,3,"Estrutura poderia ser melhor, mas atividades foram interessantes",Acho que tem poucas atrações,Variedade de atividades,null,null,17,21,brasília
+ufsc,Rafael,40,2024-10-13 14:00,5,"Gostei das atividades e da organização",Bom atendimento,Aprendizagem interessante,Ótima estrutura,null,18,22,florianópolis
+ufsc,Rafael,40,2024-10-13 14:00,4,"Achei os monitores atenciosos e a estrutura bem feita",Bons monitores,Ótima estrutura,null,null,18,22,florianópolis
+ufpr,Lucas,27,2024-10-14 13:30,4,"Bons monitores, atividades educativas",Bom atendimento,Aprendizagem interessante,null,null,15,19,curitiba
+ufpr,Lucas,27,2024-10-14 13:30,3,"Precisam melhorar a diversidade das atividades",Precisa de mais atrações,null,null,null,15,19,curitiba

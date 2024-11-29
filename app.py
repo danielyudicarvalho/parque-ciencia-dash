@@ -9,7 +9,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import dash_bootstrap_components as dbc
 
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import io
@@ -18,6 +18,22 @@ import base64
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
+
+stopwords_pt = [
+    "a", "à", "ao", "aos", "as", "àquela", "àquele", "àquelas", "àqueles", "àquilo",
+    "de", "da", "das", "do", "dos", "dum", "duma", "dumas", "duns",
+    "e", "em", "é", "era", "eram", "está", "estão", "este", "estes", "esta", "estas",
+    "foi", "foram", "há", "isso", "isto",
+    "já", "lhe", "lhes", "mais", "mas", "me", "mesma", "mesmas", "mesmo", "mesmos", 
+    "meu", "meus", "minha", "minhas", 
+    "no", "nos", "na", "nas", "não", "nós", "o", "os", "ou", "onde",
+    "para", "pela", "pelas", "pelo", "pelos", "por", "qual", "quando", "que", 
+    "se", "sem", "seu", "seus", "sua", "suas", "são", "também", "te", "tem", 
+    "tinha", "tinham", "tive", "tiveram", "tu", "um", "uma", "umas", "uns", 
+    "vai", "você", "vocês", "ela", "elas", "ele", "eles", "isso", "este", "esses", "estas"
+]
+
+
 
 def load_data(dataset_directory):
     """
@@ -134,6 +150,20 @@ def get_option_counts(df):
     options = pd.Series(options)
     option_counts = options.value_counts().dropna()
     return option_counts.reset_index().rename(columns={'index': 'Option_Text', 0: 'count'})
+
+def get_feedback_counts(df):
+    """
+    Count the occurrences of feedback provided by visitors.
+
+    Parameters:
+    - df (pd.DataFrame): The preprocessed DataFrame.
+
+    Returns:
+    - pd.Series: Series containing concatenated feedback texts.
+    """
+    feedback = df['Feedback'].dropna().astype(str).str.strip()
+    return feedback
+
 
 def create_figures(df):
     """
@@ -297,7 +327,9 @@ custom_styles = {
     'font_blue': '#007cba'
 }
 
-def create_wordcloud(option_counts):
+
+
+def create_wordcloud(feedback_counts):
     """
     Create a word cloud from the option counts.
 
@@ -308,12 +340,17 @@ def create_wordcloud(option_counts):
     - str: Base64 encoded image of the word cloud.
     """
     # Usar frases completas como entradas únicas para a nuvem
-    text = ' '.join([f"{text} " * count for text, count in zip(option_counts['Option_Text'], option_counts['count'])])
+    #text = ' '.join([f"{text} " * count for text, count in zip(option_counts['Option_Text'], option_counts['count'])])
+    text = ' '.join(feedback_counts)    
+    text = ' '.join([
+        word for word in text.split() 
+        if len(word) >= 3 and word.lower() not in stopwords_pt
+    ])
 
     # Gerar a nuvem de palavras com frases completas preservadas
     wordcloud = WordCloud(
         width=800,
-        height=400,
+        height=400, 
         background_color='white',
         collocations=False,  # Garante que palavras não sejam separadas
         prefer_horizontal=1.0  # Mantém maior proporção de palavras horizontais
@@ -363,13 +400,36 @@ def build_dashboard(df):
                         )
                     ], width=2),  # Definindo a largura da coluna
                     # Coluna com o título centralizado
+                    # dbc.Col([
+                    #     html.H1(
+                    #         "Parque da Ciência Dashboard",
+                    #         className="text-center",
+                    #         style={'margin-top': '20px', 'color': custom_styles['font_blue']}
+                    #     )
+                    # ], width=8), 
                     dbc.Col([
-                        html.H1(
-                            "Parque da Ciência Dashboard",
-                            className="text-center",
-                            style={'margin-top': '20px', 'color': custom_styles['font_blue']}
-                        )
-                    ], width=8), 
+                            html.H1("Parque da Ciência Dashboard", className="text-center", style={'margin-top': '20px', 'color': custom_styles['font_blue']}),
+                            html.Hr(),
+                            dcc.Upload(
+                                id='upload-data',
+                                children=html.Div([
+                                    'Arraste e solte ou ',
+                                    html.A('selecione um arquivo CSV')
+                                ]),
+                                style={
+                                    'width': '100%',
+                                    'height': '60px',
+                                    'lineHeight': '60px',
+                                    'borderWidth': '1px',
+                                    'borderStyle': 'dashed',
+                                    'borderRadius': '5px',
+                                    'textAlign': 'center',
+                                    'margin-bottom': '20px'
+                                },
+                                multiple=False  # Permitindo apenas um arquivo por vez
+                            ),
+                            html.Div(id='output-upload-status')
+                        ], width=8),
                     dbc.Col([
                             html.Img(
                                 src='assets/logo-t.png',  # Caminho para a outra imagem
@@ -456,6 +516,31 @@ def build_dashboard(df):
 
         html.Footer("Developed by Daniel Yudi de Carvalho", className="text-center mt-4 mb-2")
     ], fluid=True)
+
+    @app.callback(
+        Output('output-upload-status', 'children'),
+        Input('upload-data', 'contents'),
+        State('upload-data', 'filename')
+    )
+    def save_uploaded_file(contents, filename):
+        if contents is not None:
+            content_type, content_string = contents.split(',')
+            decoded = base64.b64decode(content_string)
+            try:
+                # Salvar o arquivo no diretório 'data/'
+                file_path = os.path.join('data', filename)
+                with open(file_path, 'wb') as f:
+                    f.write(decoded)
+
+                # Carregar o novo CSV e realizar a concatenação ao dataframe existente
+                new_df = pd.read_csv(file_path)
+                logging.info(f"Arquivo {filename} salvo com sucesso.")
+                return html.Div(f"Arquivo {filename} salvo com sucesso.")
+
+            except Exception as e:
+                logging.error(f"Houve um erro ao processar o arquivo {filename}: {e}")
+                return html.Div(f"Houve um erro ao processar o arquivo {filename}.")
+        return html.Div()
 
     # Callbacks to update graphs and metrics
     @app.callback(
@@ -594,14 +679,14 @@ def build_dashboard(df):
 
             # Recreate figures with filtered data
             figures = create_figures(df_filtered)
-            wordcloud_image = create_wordcloud(get_option_counts(df_filtered))
+            wordcloud_image = create_wordcloud(get_feedback_counts(df_filtered))
 
             # Graphs content
             graphs = html.Div([
                dbc.Row([
                     dbc.Col([
                         html.H3([
-                            "Ocorrências das opções selecionadas",
+                            "Feedbacks em texto livre",
                             html.Span(
                                 " ⓘ",
                                 id="tooltip-target-option-counts",
@@ -832,6 +917,7 @@ def main():
     # Run the app
     #app.run_server(debug=True)
     app.run_server(debug=True, host='0.0.0.0', port=8080)
+
 
 
 if __name__ == '__main__':

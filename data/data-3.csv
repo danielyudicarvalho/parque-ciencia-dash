@@ -1,0 +1,11 @@
+School_Name,Server_Responsible,Student_Count,Visit_DateTime,Rating,Feedback,Option_1,Option_2,Option_3,Option_4,Min_Age,Max_Age,City_District
+unb,Ana,36,2024-09-25 09:45,4,"Parque bem organizado e educativo",Bom atendimento,Aprendizagem interessante,null,Boa estrutura,15,18,brasilia
+unb,Ana,36,2024-09-25 09:45,5,"Atividades interativas e ambiente agradável",Variedade de atrações,Bom atendimento,Aprendizagem interessante,null,15,18,brasilia
+ufal,Fernando,29,2024-09-26 10:30,3,"Gostei, mas algumas atrações estavam desatualizadas",Boas atrações mas achei um pouco confuso,null,null,null,12,15,maceio
+ufal,Fernando,29,2024-09-26 10:30,2,"Faltou um pouco mais de envolvimento e interatividade",Interessante mas faltou interatividade e envolvimento,null,null,null,12,15,maceio
+ufmg,Sara,44,2024-09-27 14:15,5,"Ótimo atendimento e estrutura bem organizada",Bom atendimento,Boa estrutura,Variedade de atrações,null,17,20,belo horizonte
+ufmg,Sara,44,2024-09-27 14:15,4,"Atividades educativas e diversificadas",Aprendizagem interessante,Variedade de atrações,Bom atendimento,null,17,20,belo horizonte
+ufrgs,Pedro,40,2024-09-28 11:00,1,"Parque sem manutenção adequada, experiência ruim",Acho que o parque está um pouco desatualizado e mal conservado,null,null,null,16,19,porto alegre
+ufrgs,Pedro,40,2024-09-28 11:00,2,"A falta de funcionários afetou negativamente a experiência",Acho que a falta de mais funcionários prejudicou o parque,null,null,null,16,19,porto alegre
+ufba,Lucas,31,2024-09-29 13:00,5,"Excelente parque, recomendo para todas as idades",Variedade de atrações,Bom atendimento,null,Aprendizagem interessante,13,16,salvador
+ufba,Lucas,31,2024-09-29 13:00,3,"Boa estrutura, mas faltou algumas atividades",Boa estrutura,null,null,null,13,16,salvador

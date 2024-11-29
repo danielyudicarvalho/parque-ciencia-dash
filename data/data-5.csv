@@ -1,0 +1,7 @@
+School_Name,Server_Responsible,Student_Count,Visit_DateTime,Rating,Feedback,Option_1,Option_2,Option_3,Option_4,Min_Age,Max_Age,City_District
+uejs,Arthur,33,2024-09-10 10:30,3,Gostei da organização,Variedade de atrações,Bom atendimento,,,56,90,São Paulo
+ups,Daniel,22,2024-09-10 13:15,5,Ótimo lugar para aprender,Boa estrutura,Interessante mas faltou interatividade e envolvimento,,,11,12,Campo Grande
+ufms,Lucas,45,2024-09-12 09:30,4,Bom atendimento,Muito bom mas tem poucas atrações,,Boas atrações mas achei um pouco confuso,,13,16,Campo Grande
+uejs,Arthur,33,2024-09-13 11:45,2,Precisa de mais opções,Acho que o parque está um pouco desatualizado e mal conservado,A falta de estrutura do parque prejudicou a minha experiência,,,56,90,São Paulo
+ups,Daniel,22,2024-09-14 14:00,4,Bons monitores,Variedade de atrações,Bom atendimento,Acho que tem poucas atrações,,11,12,Campo Grande
+ufms,Lucas,45,2024-09-15 10:00,5,Ótima experiência para as crianças,Boa estrutura,Aprendizagem interessante,Interessante mas faltou interatividade e envolvimento,,13,16,Campo Grande

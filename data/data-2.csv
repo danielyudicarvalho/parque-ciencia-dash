@@ -1,0 +1,11 @@
+School_Name,Server_Responsible,Student_Count,Visit_DateTime,Rating,Feedback,Option_1,Option_2,Option_3,Option_4,Min_Age,Max_Age,City_District
+ufes,Roberto,40,2024-09-20 09:00,4,"O parque é muito educativo e bem organizado",Variedade de atrações,Bom atendimento,null,Aprendizagem interessante,13,16,fortaleza
+ufes,Roberto,40,2024-09-20 09:00,3,"Gostei da organização mas faltou algumas atrações",Variedade de atrações,Boa estrutura,null,null,13,16,fortaleza
+uece,Paula,30,2024-09-21 14:30,5,"Ótima experiência e ótimo atendimento",Bom atendimento,Aprendizagem interessante,Boa estrutura,null,14,17,curitiba
+uece,Paula,30,2024-09-21 14:30,4,"Achei interessante, mas poderia ter mais interatividade",Variedade de atrações,Bom atendimento,null,Aprendizagem interessante,14,17,curitiba
+uefs,Mariana,25,2024-09-22 10:45,2,"A falta de manutenção prejudicou a experiência",Boas atrações mas achei um pouco confuso,null,null,null,11,12,salvador
+uefs,Mariana,25,2024-09-22 10:45,3,"Boa estrutura, mas faltou um pouco mais de atividades",Boa estrutura,null,Interessante mas faltou interatividade e envolvimento,null,11,12,salvador
+ufc,Carlos,50,2024-09-23 11:15,4,"Ótima organização e aprendizado relevante",Variedade de atrações,Aprendizagem interessante,null,Bom atendimento,15,18,fortaleza
+ufc,Carlos,50,2024-09-23 11:15,5,"Parque bem cuidado e atividades diversificadas",Bom atendimento,null,Boa estrutura,Variedade de atrações,15,18,fortaleza
+uerj,Juliana,38,2024-09-24 13:20,1,"O parque está mal conservado e precisa de mais funcionários",Acho que o parque está um pouco desatualizado e mal conservado,Acho que a falta de mais funcionários prejudicou o parque,null,null,16,19,brasilia
+uerj,Juliana,38,2024-09-24 13:20,2,"Achei as atrações poucas para o porte do parque",Acho que tem poucas atrações,null,null,null,16,19,brasilia
