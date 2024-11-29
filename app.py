@@ -399,44 +399,44 @@ def build_dashboard(df):
                             }
                         )
                     ], width=2),  # Definindo a largura da coluna
-                    # Coluna com o título centralizado
-                    # dbc.Col([
-                    #     html.H1(
-                    #         "Parque da Ciência Dashboard",
-                    #         className="text-center",
-                    #         style={'margin-top': '20px', 'color': custom_styles['font_blue']}
-                    #     )
-                    # ], width=8), 
+                    #Coluna com o título centralizado
                     dbc.Col([
-                            html.H1("Parque da Ciência Dashboard", className="text-center", style={'margin-top': '20px', 'color': custom_styles['font_blue']}),
-                            html.Hr(),
-                            dcc.Upload(
-                                id='upload-data',
-                                children=html.Div([
-                                    'Arraste e solte ou ',
-                                    html.A('selecione um arquivo CSV')
-                                ]),
-                                style={
-                                    'width': '100%',
-                                    'height': '60px',
-                                    'lineHeight': '60px',
-                                    'borderWidth': '1px',
-                                    'borderStyle': 'dashed',
-                                    'borderRadius': '5px',
-                                    'textAlign': 'center',
-                                    'margin-bottom': '20px'
-                                },
-                                multiple=False  # Permitindo apenas um arquivo por vez
-                            ),
-                            html.Div(id='output-upload-status')
-                        ], width=8),
+                        html.H1(
+                            "Parque da Ciência Dashboard",
+                            className="text-center",
+                            style={'margin-top': '20px', 'color': custom_styles['font_blue']}
+                        )
+                    ], width=8), 
+                    # dbc.Col([
+                    #         html.H1("Parque da Ciência Dashboard", className="text-center", style={'margin-top': '20px', 'color': custom_styles['font_blue']}),
+                    #         html.Hr(),
+                    #         dcc.Upload(
+                    #             id='upload-data',
+                    #             children=html.Div([
+                    #                 'Arraste e solte ou ',
+                    #                 html.A('selecione um arquivo CSV')
+                    #             ]),
+                    #             style={
+                    #                 'width': '100%',
+                    #                 'height': '60px',
+                    #                 'lineHeight': '60px',
+                    #                 'borderWidth': '1px',
+                    #                 'borderStyle': 'dashed',
+                    #                 'borderRadius': '5px',
+                    #                 'textAlign': 'center',
+                    #                 'margin-bottom': '20px'
+                    #             },
+                    #             multiple=False  # Permitindo apenas um arquivo por vez
+                    #         ),
+                    #         html.Div(id='output-upload-status')
+                    #     ], width=8),
                     dbc.Col([
                             html.Img(
                                 src='assets/logo-t.png',  # Caminho para a outra imagem
                                 style={
                                     'height': '200px',  # Ajustar a altura conforme necessário
                                     'width': 'auto',
-                                    'margin-right': '10px',  # Espaçamento para melhor posicionamento
+                                    'margin-right': '0px',  # Espaçamento para melhor posicionamento
                                     'float': 'right'  # Alinhar o logo à direita
                                 }
                             )
@@ -517,30 +517,30 @@ def build_dashboard(df):
         html.Footer("Developed by Daniel Yudi de Carvalho", className="text-center mt-4 mb-2")
     ], fluid=True)
 
-    @app.callback(
-        Output('output-upload-status', 'children'),
-        Input('upload-data', 'contents'),
-        State('upload-data', 'filename')
-    )
-    def save_uploaded_file(contents, filename):
-        if contents is not None:
-            content_type, content_string = contents.split(',')
-            decoded = base64.b64decode(content_string)
-            try:
-                # Salvar o arquivo no diretório 'data/'
-                file_path = os.path.join('data', filename)
-                with open(file_path, 'wb') as f:
-                    f.write(decoded)
+    # @app.callback(
+    #     Output('output-upload-status', 'children'),
+    #     Input('upload-data', 'contents'),
+    #     State('upload-data', 'filename')
+    # )
+    # def save_uploaded_file(contents, filename):
+    #     if contents is not None:
+    #         content_type, content_string = contents.split(',')
+    #         decoded = base64.b64decode(content_string)
+    #         try:
+    #             # Salvar o arquivo no diretório 'data/'
+    #             file_path = os.path.join('data', filename)
+    #             with open(file_path, 'wb') as f:
+    #                 f.write(decoded)
 
-                # Carregar o novo CSV e realizar a concatenação ao dataframe existente
-                new_df = pd.read_csv(file_path)
-                logging.info(f"Arquivo {filename} salvo com sucesso.")
-                return html.Div(f"Arquivo {filename} salvo com sucesso.")
+    #             # Carregar o novo CSV e realizar a concatenação ao dataframe existente
+    #             new_df = pd.read_csv(file_path)
+    #             logging.info(f"Arquivo {filename} salvo com sucesso.")
+    #             return html.Div(f"Arquivo {filename} salvo com sucesso.")
 
-            except Exception as e:
-                logging.error(f"Houve um erro ao processar o arquivo {filename}: {e}")
-                return html.Div(f"Houve um erro ao processar o arquivo {filename}.")
-        return html.Div()
+    #         except Exception as e:
+    #             logging.error(f"Houve um erro ao processar o arquivo {filename}: {e}")
+    #             return html.Div(f"Houve um erro ao processar o arquivo {filename}.")
+    #     return html.Div()
 
     # Callbacks to update graphs and metrics
     @app.callback(
@@ -915,8 +915,8 @@ def main():
     app = build_dashboard(df_processed)
 
     # Run the app
-    #app.run_server(debug=True)
-    app.run_server(debug=True, host='0.0.0.0', port=8080)
+    app.run_server(debug=True)
+    #app.run_server(debug=True, host='0.0.0.0', port=8080)
 
 
 
