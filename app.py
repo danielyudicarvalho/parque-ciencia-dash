@@ -723,16 +723,17 @@ def build_dashboard(df):
                dbc.Row([
                     dbc.Col([
                         html.H3([
-                            "Feedbacks em texto livre",
+                            "Ocorrencia de Feedbacks selecionados por monitores",
                             html.Span(
                                 " ⓘ",
                                 id="tooltip-target-option-counts",
                                 style={"cursor": "pointer", "color": custom_styles['font_blue'], "margin-left": "10px"}
                             )
                         ], style={'color': custom_styles['font_blue']}),
-                        html.Img(src=wordcloud_image, style={'width': '100%'}) if wordcloud_image else html.Div("No data to display the options chart."),
+                        dcc.Graph(figure=figures['option_counts']) if figures['option_counts'] else html.Div("No data to display the options chart."),
+                        #html.Img(src=wordcloud_image, style={'width': '100%'}) if wordcloud_image else html.Div("No data to display the options chart."),
                         dbc.Tooltip(
-                            "Este gráfico mostra uma nuvem das opções mais selecionadas pelos visitantes, destacando as preferências mais comuns.",
+                            "Este gráfico mostra a ocorrencia de feedbacks complementares selecionados por monitores ao votarem.",
                             target="tooltip-target-option-counts",
                             placement="top",
                         ),
@@ -934,21 +935,41 @@ def build_dashboard(df):
 
 
                 html.Hr(),
-
-                html.H3([
-                    "Correlação entre Opções e Votos",
-                    html.Span(
-                        " ⓘ",
-                        id="tooltip-target-correlation-options",
-                        style={"cursor": "pointer", "color": custom_styles['font_blue'], "margin-left": "10px"}
-                    )
-                ], style={'color': custom_styles['font_blue']}),
-                dcc.Graph(figure=figures['heatmap']) if figures['heatmap'] else html.Div("No data to display the heatmap."),
-                dbc.Tooltip(
-                    "Este gráfico mostra a correlação entre as diferentes opções escolhidas pelos visitantes e as notas atribuídas. As cores representam a média das avaliações.",
-                    target="tooltip-target-correlation-options",
-                    placement="top",
-                ),
+                dbc.Row([
+                    dbc.Col([
+                         html.H3([
+                            "Correlação entre Opções e Votos",
+                            html.Span(
+                                " ⓘ",
+                                id="tooltip-target-correlation-options",
+                                style={"cursor": "pointer", "color": custom_styles['font_blue'], "margin-left": "10px"}
+                            )
+                        ], style={'color': custom_styles['font_blue']}),
+                        dcc.Graph(figure=figures['heatmap']) if figures['heatmap'] else html.Div("No data to display the heatmap."),
+                        dbc.Tooltip(
+                            "Este gráfico mostra a correlação entre as diferentes opções escolhidas pelos visitantes e as notas atribuídas. As cores representam a média das avaliações.",
+                            target="tooltip-target-correlation-options",
+                            placement="top",
+                        )
+                    ]),
+                     dbc.Col([
+                         html.H3([
+                            "Feedbacks em texto livre",
+                            html.Span(
+                                " ⓘ",
+                                id="tooltip-target-wordcloud",
+                                style={"cursor": "pointer", "color": custom_styles['font_blue'], "margin-left": "10px"}
+                            )
+                        ], style={'color': custom_styles['font_blue']}),
+                        #dcc.Graph(figure=figures['heatmap']) if figures['heatmap'] else html.Div("No data to display the heatmap."),
+                        html.Img(src=wordcloud_image, style={'width': '100%'}) if wordcloud_image else html.Div("No data to display the options chart."),
+                        dbc.Tooltip(
+                            "Esta é uma nuvem de palavras coletadas dos feedbacks em texto livre",
+                            target="tooltip-target-wordcloud",
+                            placement="top",
+                        )
+                    ])
+                ])            
 
             ])
 
