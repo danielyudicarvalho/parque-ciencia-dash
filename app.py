@@ -133,7 +133,7 @@ def calculate_nps(df):
     df_nps['Detractors'] = df_nps.get('Detractors', 0)
     df_nps['NPS'] = ((df_nps['Promoters'] - df_nps['Detractors']) / df_nps['Total']) * 100
 
-    return nps_score, df_nps.reset_index()
+    return nps_score, df_nps.reset_index(), total_responses
 
 def get_option_counts(df):
     """
@@ -178,7 +178,7 @@ def create_figures(df):
     figures = {}
 
     # Calculate NPS
-    nps_score, df_nps = calculate_nps(df)
+    nps_score, df_nps, total_responses = calculate_nps(df)
     figures['nps_score'] = nps_score
     figures['df_nps'] = df_nps if not df_nps.empty else pd.DataFrame({'City_District': [], 'NPS': []})
 
@@ -637,7 +637,7 @@ def build_dashboard(df):
             return cards, graphs
         else:
             # Recalculate metrics and figures with filtered data
-            nps_score, df_nps = calculate_nps(df_filtered)
+            nps_score, df_nps, total_responses = calculate_nps(df_filtered)
             df_nps = round(nps_score, 2)
             total_visitors = round(df_filtered['Student_Count'].sum(), 2)
             avg_rating = round(df_filtered['Rating'].mean(), 2)
@@ -647,9 +647,15 @@ def build_dashboard(df):
             cards = dbc.Col([
                 dbc.Card(
                     dbc.CardBody([
-                        html.H4("Pontuação geral do NPS", className="card-title", style={'color': 'white'}),
+                        html.H4(["Pontuação geral do NPS",
+                                    html.Span(
+                                        " ⓘ",
+                                        id="tooltip-target-nps-score",
+                                        style={"cursor": "pointer", "color": custom_styles['background'], "margin-left": "10px"}
+                                    )
+                                ], className="card-title", style={'color': 'white'}),
                         html.H2(df_nps, className="card-text", style={'color': 'white'}),
-                    ]),
+                    ]),                   
                     color=custom_styles['card_colors'][0],
                     inverse=True,
                     className="mb-3",
@@ -657,8 +663,32 @@ def build_dashboard(df):
                 ),
                 dbc.Card(
                     dbc.CardBody([
-                        html.H4("Total de visitantes", className="card-title", style={'color': 'white'}),
+                        html.H4([
+                            "Total de visitantes",
+                            html.Span(
+                                        " ⓘ",
+                                        id="tooltip-target-total-visitors",
+                                        style={"cursor": "pointer", "color": custom_styles['background'], "margin-left": "10px"}
+                                    )
+                            ], className="card-title", style={'color': 'white'}),
                         html.H2(total_visitors, className="card-text", style={'color': 'white'}),
+                    ]),
+                    color=custom_styles['card_colors'][1],
+                    inverse=True,
+                    className="mb-3",
+                    style={'maxWidth': '600px', 'margin': '0 auto'}
+                ),
+                 dbc.Card(
+                    dbc.CardBody([
+                        html.H4([
+                            "Avaliação Total",
+                            html.Span(
+                                        " ⓘ",
+                                        id="tooltip-target-total-avaliation",
+                                        style={"cursor": "pointer", "color": custom_styles['background'], "margin-left": "10px"}
+                                    )
+                            ], className="card-title", style={'color': 'white'}),
+                        html.H2(total_responses, className="card-text", style={'color': 'white'}),
                     ]),
                     color=custom_styles['card_colors'][1],
                     inverse=True,
@@ -667,7 +697,14 @@ def build_dashboard(df):
                 ),
                 dbc.Card(
                     dbc.CardBody([
-                        html.H4("Avaliação média", className="card-title", style={'color': 'white'}),
+                        html.H4([
+                            "Avaliação média",
+                            html.Span(
+                                        " ⓘ",
+                                        id="tooltip-target-mean-avaliation",
+                                        style={"cursor": "pointer", "color": custom_styles['background'], "margin-left": "10px"}
+                                    )
+                            ], className="card-title", style={'color': 'white'}),
                         html.H2(avg_rating, className="card-text", style={'color': 'white'}),
                     ]),
                     color=custom_styles['card_colors'][2],
@@ -697,6 +734,26 @@ def build_dashboard(df):
                         dbc.Tooltip(
                             "Este gráfico mostra uma nuvem das opções mais selecionadas pelos visitantes, destacando as preferências mais comuns.",
                             target="tooltip-target-option-counts",
+                            placement="top",
+                        ),
+                        dbc.Tooltip(
+                            "Este card mostra o total de visitantes.",
+                            target="tooltip-target-total-visitors",
+                            placement="top",
+                        ),
+                        dbc.Tooltip(
+                            "Este card mostra a avaliação total, ou a soma de todas as avaliações.",
+                            target="tooltip-target-total-avaliation",
+                            placement="top",
+                        ),
+                        dbc.Tooltip(
+                            "Este card mostra a avaliação média, ou a soma de todas as avaliações dividido pela quantidade de votos.",
+                            target="tooltip-target-mean-avaliation",
+                            placement="top",
+                        ),
+                        dbc.Tooltip(
+                            "Este card mostra o resultado do calculo NPS.",
+                            target="tooltip-target-nps-score",
                             placement="top",
                         ),
                         # dcc.Graph(figure=figures['option_counts']) if figures['option_counts'] else html.Div("No data to display the options chart.")
